@@ -1,0 +1,13 @@
+{% extends "admin_base.html" %}
+{% block admin %}
+<h1 class="h1s">Action log</h1>
+<p class="fine">The last 200 actions in the admin.</p>
+<div class="tblwrap"><table class="hist">
+  <thead><tr><th scope="col">When (UTC)</th><th scope="col">Action</th><th scope="col">Account</th><th scope="col">Details</th></tr></thead>
+  <tbody>
+  {% for r in items %}
+  <tr><td>{{ r.date }}</td><td>{{ r.action }}</td><td>{% if r.exists %}<a href="/admin/users/{{ r.code }}">{{ r.code }}</a>{% else %}{{ r.code }}{% endif %}</td><td>{{ r.detail }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}

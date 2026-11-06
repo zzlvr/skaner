@@ -1,0 +1,139 @@
+{% extends "app_shell.html" %}
+{% block title %}{{ t('co_title') }}{% endblock %}
+{% block app %}
+<h1 class="h1s">{% if in_org %}{{ org.name }}{% else %}{{ t('nav_company') }}{% endif %}</h1>
+{% if done %}<p class="note" role="status">{{ done }}</p>{% endif %}
+{% if error %}<p class="fine err" role="alert">{{ error }}</p>{% endif %}
+{% if not in_org %}
+{% if invites %}
+<section class="card acsec">
+  <h2 class="h2s">{{ t('co_invites_h') }}</h2>
+  {% for i in invites %}
+  <div class="coinv">
+    <p>{{ i.text }} <span class="fine">{{ i.until }}</span></p>
+    <p class="fine">{{ t('co_join_p') }}</p>
+    <div class="exp-row">
+      <form method="post" action="/app/company/answer">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="invite" value="{{ i.id }}">
+        <button class="btn" type="submit" name="answer" value="accept">{{ t('co_accept') }}</button>
+      </form>
+      <form method="post" action="/app/company/answer">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="invite" value="{{ i.id }}">
+        <button class="btn ghost" type="submit" name="answer" value="decline">{{ t('co_decline') }}</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+</section>
+{% endif %}
+<section class="card acsec">
+  <h2 class="h2s">{{ t('co_new_h') }}</h2>
+  <p>{{ t('co_none_p') }}</p>
+  <p class="fine">{{ t('co_none_p2') }}</p>
+  <form class="acdel" method="post" action="/app/company/create">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label for="coname">{{ t('co_name') }}</label>
+    <input id="coname" name="name" type="text" minlength="2" maxlength="{{ name_max }}" value="{{ name_value }}" autocomplete="organization" required>
+    <button class="btn" type="submit">{{ t('co_create') }}</button>
+  </form>
+  <p class="fine">{{ limits_note }}</p>
+</section>
+{% else %}
+<section class="card acsec">
+  <h2 class="h2s">{{ t('co_balance_h') }}</h2>
+  {% for line in lines %}<p>{{ line }}</p>{% endfor %}
+</section>
+<section class="card acsec">
+  <h2 class="h2s">{{ t('co_members_h') }} <span class="fine">{{ seats }}</span></h2>
+  <div class="tblwrap"><table class="hist">
+    <thead><tr><th scope="col">{{ t('co_col_who') }}</th><th scope="col">{{ t('co_col_role') }}</th><th scope="col">{{ t('co_col_since') }}</th>{% if is_owner %}<th scope="col"></th>{% endif %}</tr></thead>
+    <tbody>
+    {% for m in members %}
+    <tr><td>{{ m.label }}</td><td>{{ m.role }}</td><td>{{ m.since }}</td>{% if is_owner %}<td>{% if m.removable %}<form class="coinline" method="post" action="/app/company/remove">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input type="hidden" name="member" value="{{ m.id }}">
+      <button class="btn ghost" type="submit">{{ t('co_remove') }}</button>
+    </form>{% endif %}</td>{% endif %}</tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% if is_owner %}<p class="fine">{{ t('co_remove_p') }}</p>{% else %}<p class="fine">{{ t('co_member_p') }}</p>{% endif %}
+  <p class="fine">{{ limits_note }}</p>
+</section>
+{% if is_owner %}
+<section class="card acsec">
+  <h2 class="h2s">{{ t('co_link_h') }}</h2>
+  <p>{{ t('co_link_p') }}</p>
+  {% if link %}
+  <label class="fine" for="colink">{{ t('co_link_new') }}</label>
+  <div class="colink">
+    <input id="colink" type="text" value="{{ link }}" readonly>
+    <button class="btn ghost" type="button" id="cocopy" data-done="{{ t('co_copied') }}" hidden>{{ t('co_copy') }}</button>
+  </div>
+  {% endif %}
+  <form method="post" action="/app/company/invite-link">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <button class="btn{% if link %} ghost{% endif %}" type="submit">{{ t('co_link_btn') }}</button>
+  </form>
+</section>
+<section class="card acsec">
+  <h2 class="h2s">{{ t('co_code_h') }}</h2>
+  <p>{{ t('co_code_p') }}</p>
+  <form class="acdel" method="post" action="/app/company/invite-code">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label for="cocode">{{ t('co_code_label') }}</label>
+    <input id="cocode" name="code" type="text" maxlength="12" placeholder="SK-XXXXXX" autocomplete="off" required>
+    <button class="btn" type="submit">{{ t('co_code_btn') }}</button>
+  </form>
+</section>
+<section class="card acsec">
+  <h2 class="h2s">{{ t('co_pending_h') }}</h2>
+  {% if pending %}
+  <div class="tblwrap"><table class="hist">
+    <tbody>
+    {% for p in pending %}
+    <tr><td>{{ p.what }}</td><td>{{ p.until }}</td><td><form class="coinline" method="post" action="/app/company/cancel">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input type="hidden" name="invite" value="{{ p.id }}">
+      <button class="btn ghost" type="submit">{{ t('co_cancel') }}</button>
+    </form></td></tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}<p class="fine">{{ t('co_pending_none') }}</p>{% endif %}
+  <p class="fine">{{ t('co_pending_p') }}</p>
+</section>
+<section class="card acsec">
+  <h2 class="h2s">{{ t('co_rename_h') }}</h2>
+  <form class="acdel" method="post" action="/app/company/rename">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label for="corename">{{ t('co_name') }}</label>
+    <input id="corename" name="name" type="text" minlength="2" maxlength="{{ name_max }}" value="{{ org.name }}" required>
+    <button class="btn ghost" type="submit">{{ t('co_rename_btn') }}</button>
+  </form>
+</section>
+<section class="card acsec">
+  <h2 class="h2s">{{ t('co_del_h') }}</h2>
+  <p>{{ t('co_del_p') }}</p>
+  <form class="acdel" method="post" action="/app/company/delete">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label for="codel">{{ del_label }}</label>
+    <input id="codel" name="confirm" type="text" maxlength="20" autocomplete="off" required>
+    <button class="btn ghost" type="submit">{{ t('co_del_btn') }}</button>
+  </form>
+</section>
+{% else %}
+<section class="card acsec">
+  <h2 class="h2s">{{ t('co_leave_h') }}</h2>
+  <p>{{ t('co_leave_p') }}</p>
+  <form method="post" action="/app/company/leave">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <button class="btn ghost" type="submit">{{ t('co_leave_btn') }}</button>
+  </form>
+</section>
+{% endif %}
+{% endif %}
+{% endblock %}
+{% block scripts %}{% if link %}<script src="/static/company.js" defer></script>{% endif %}{% endblock %}

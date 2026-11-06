@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}{% if lang == 'kk' %}Қауіпсіздік — Skaner{% elif lang == 'en' %}Security — Skaner{% else %}Безопасность — Skaner{% endif %}{% endblock %}
+{% block head %}<link rel="stylesheet" href="/static/legal.css">{% endblock %}
+{% block main %}
+<section><div class="wrap prose">
+{% if lang == 'kk' %}
+<h1>Қауіпсіздік</h1>
+<p class="meta">Редакция: 2026 жылғы 24 қазан</p>
+<p class="lead">Жасалғанның бәрі қысқаша. Тек шын мәнінде жұмыс істейтін нәрсе көрсетілген. Бірде-бір шара тәуекелді толық жоймайды.</p>
+<ul>
+<li><b>Парольсіз кіру.</b> Эл. поштаға келетін код: 10 минут жарамды, бір рет қана, әрекеттер саны шектелген. Кіру бетінде «сіз робот емессіз» тексеруі бар (Cloudflare Turnstile).</li>
+<li><b>Пошта мекенжайы сақталмайды.</b> Дерекқорда тек оның құпия кілтпен жасалған таңбасы (HMAC) сақталады. Телефон нөмірі де тек осындай таңба түрінде сақталады.</li>
+<li><b>Құжаттар сақталмайды.</b> Жүктелген файлдар жадта өңделеді және дискіге жазылмайды. Тану үшін олар шифрланған байланыс арқылы тану қызметіне беріледі (Құпиялылық саясатын қараңыз).</li>
+<li><b>Нәтижелер шифрланады.</b> Дерекқорда AES-256-GCM арқылы шифрланған түрде 90 күн сақталады. Шифрлау кілті дерекқорда емес, сервер баптауларында сақталады.</li>
+<li><b>Нәтижелерге қолжетімділік.</b> Нәтижені тек оны жүктеген адам және компанияда — компания иесі көреді. Бөтен нәтижеге сілтеме ашылмайды.</li>
+<li><b>Қорғалған байланыс.</b> Сайт тек HTTPS арқылы Cloudflare желісі арқылы жұмыс істейді; Cloudflare мен сервер арасындағы байланыс та шифрланады. Сервер сайтқа сұрауларды тек Cloudflare мекенжайларынан қабылдайды.</li>
+<li><b>Браузердегі қорғау.</b> Cookie тек қорғалған байланыс арқылы беріледі және сайттың скрипттеріне қолжетімсіз; формалар жалған сұраулардан қорғалған (CSRF); бетте кірістірілген скрипттер жоқ, қатаң мазмұн саясаты (CSP) қолданылады.</li>
+<li><b>Құжаттарды қарамаймыз.</b> Тану автоматты түрде жүреді. Біз файлды немесе нәтижені тек сіз көмек сұрап, оны өзіңіз жіберсеңіз ғана көреміз.</li>
+<li><b>Теріс пайдаланудан қорғау.</b> Файл саны, көлемі, сұраулар жиілігі және күндік өңдеу көлемі шектелген.</li>
+<li><b>Журналдар.</b> Журналдарда құжаттардың мазмұны, пошта мекенжайлары, телефон нөмірлері және кіру кодтары жоқ. Сұраулар журналы бет мекенжайын параметрлерсіз жазады.</li>
+<li><b>Резервтік көшірмелер.</b> Дерекқордың көшірмесі күн сайын жасалады. Сервердегі көшірмелерден басқа, бір көшірме иесіне ашық кілтпен шифрланған түрде жіберіледі; оны ашатын кілт тек иесінде, серверде жоқ.</li>
+</ul>
+<p>Осалдықты байқасаңыз, «Байланыс» беті арқылы хабарлаңыз.</p>
+
+{% elif lang == 'en' %}
+<h1>Security</h1>
+<p class="meta">Version of 24 October 2026</p>
+<p class="lead">What is done, in short. Only what actually works is listed. No measure removes the risk completely.</p>
+<ul>
+<li><b>Sign-in without a password.</b> A code sent by email: valid 10 minutes, usable once, with a limit on attempts. The sign-in page has a "you are not a robot" check (Cloudflare Turnstile).</li>
+<li><b>Your email address is not stored.</b> The database keeps only a fingerprint of it made with a secret key (HMAC). A phone number is also kept only as such a fingerprint.</li>
+<li><b>Documents are not stored.</b> Uploaded files are processed in memory and are not written to disk. For recognition they are sent over an encrypted connection to the recognition service (see the Privacy Policy).</li>
+<li><b>Results are encrypted.</b> Kept in the database encrypted with AES-256-GCM for 90 days. The encryption key is kept in the server settings, not in the database.</li>
+<li><b>Access to results.</b> A result is seen only by the person who uploaded it and, in a company, by the company owner. A link to someone else's result does not open.</li>
+<li><b>Secure connection.</b> The site works only over HTTPS, through the Cloudflare network; the connection between Cloudflare and the server is encrypted too. The server accepts requests to the site only from Cloudflare addresses.</li>
+<li><b>Protection in the browser.</b> Cookies are sent only over a secure connection and are not readable by page scripts; forms are protected against forged requests (CSRF); pages contain no inline scripts and use a strict content security policy (CSP).</li>
+<li><b>We do not look at documents.</b> Recognition is automatic. We see a file or result only if you ask for help and send it to us yourself.</li>
+<li><b>Protection against abuse.</b> Limits on the number and size of files, on request frequency and on the daily processing volume.</li>
+<li><b>Logs.</b> Logs contain no document contents, email addresses, phone numbers or sign-in codes. The request log records page addresses without parameters.</li>
+<li><b>Backups.</b> A copy of the database is made daily. Besides the copies on the server, one copy is sent to the owner encrypted with a public key; the key that opens it is only with the owner, not on the server.</li>
+</ul>
+<p>If you notice a vulnerability, tell us through the Contacts page.</p>
+
+{% else %}
+<h1>Безопасность</h1>
+<p class="meta">Редакция от 24 октября 2026</p>
+<p class="lead">Коротко о том, что сделано. Перечислено только то, что реально работает. Ни одна мера не исключает риск полностью.</p>
+<ul>
+<li><b>Вход без пароля.</b> Код на почту: действует 10 минут, работает один раз, число попыток ограничено. На странице входа — проверка «вы не робот» (Cloudflare Turnstile).</li>
+<li><b>Адрес почты не хранится.</b> В базе хранится только его отпечаток, сделанный с секретным ключом (HMAC). Номер телефона тоже хранится только в виде такого отпечатка.</li>
+<li><b>Документы не сохраняются.</b> Загруженные файлы обрабатываются в памяти и не записываются на диск. Для распознавания они передаются по зашифрованному соединению сервису распознавания (см. Политику конфиденциальности).</li>
+<li><b>Результаты зашифрованы.</b> В базе лежат в зашифрованном виде (AES-256-GCM) 90 дней. Ключ шифрования хранится в настройках сервера, а не в базе.</li>
+<li><b>Доступ к результатам.</b> Результат видит только тот, кто его загрузил, а в компании — ещё её владелец. Ссылка на чужой результат не открывается.</li>
+<li><b>Защищённое соединение.</b> Сайт работает только по HTTPS через сеть Cloudflare; соединение между Cloudflare и сервером тоже шифруется. Сервер принимает запросы к сайту только с адресов Cloudflare.</li>
+<li><b>Защита в браузере.</b> Cookies передаются только по защищённому соединению и недоступны скриптам страницы; формы защищены от подделки запросов (CSRF); на страницах нет встроенных скриптов, действует строгая политика содержимого (CSP).</li>
+<li><b>Документы мы не просматриваем.</b> Распознавание автоматическое. Файл или результат мы видим, только если вы сами просите помочь и присылаете его нам.</li>
+<li><b>Защита от злоупотреблений.</b> Ограничения на число и размер файлов, на частоту запросов и на дневной объём обработки.</li>
+<li><b>Журналы.</b> В журналах нет содержимого документов, адресов почты, номеров телефонов и кодов входа. Журнал запросов записывает адреса страниц без параметров.</li>
+<li><b>Резервные копии.</b> Копия базы делается ежедневно. Кроме копий на сервере, одна копия отправляется владельцу, зашифрованная открытым ключом; ключ, которым её можно открыть, есть только у владельца, на сервере его нет.</li>
+</ul>
+<p>Если заметили уязвимость, сообщите нам через страницу «Контакты».</p>
+{% endif %}
+</div></section>
+{% endblock %}

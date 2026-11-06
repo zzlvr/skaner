@@ -1,0 +1,53 @@
+{% extends "app_shell.html" %}
+{% block title %}{{ t('up_page_title') }}{% endblock %}
+{% block app %}
+<h1 class="h1s">{{ t('up_title') }}</h1>
+{% if error %}<p class="fine err" role="alert">{{ error }}</p>{% endif %}
+{% if need_phone %}<p class="note">{{ phone_more }} <a href="/app/phone">{{ t('ph_go') }}</a></p>{% endif %}
+{% for text in co_invites %}<p class="note">{{ text }} <a href="/app/company">{{ t('co_answer') }}</a></p>{% endfor %}
+{% if active %}<p class="note">{{ t('up_active') }} <a href="/app/batches/{{ active.public_id }}">{{ t('up_active_open') }}</a></p>{% endif %}
+<form class="upform" id="upform" method="post" action="/app/upload" enctype="multipart/form-data"
+      data-max-files="{{ max_files }}" data-max-mb="{{ max_mb }}"
+      data-msg-files="{{ t('up_js_files')|replace('{files}', max_files|string) }}"
+      data-msg-size="{{ t('up_js_size')|replace('{mb}', max_mb|string) }}"
+      data-msg-sending="{{ t('up_sending') }}" data-msg-remove="{{ t('up_remove') }}"
+      data-msg-submit="{{ t('up_submit') }}" data-msg-submit-scan="{{ t('up_submit_scan') }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <div class="uprow">
+    <label id="updoctype">{{ t('up_doctype') }}
+      <select name="doctype">{% for key, label in doctypes %}<option value="{{ key }}">{{ label }}</option>{% endfor %}</select>
+    </label>
+    <label>{{ t('up_fmt') }}
+      <select name="fmt" id="upfmt">{% for group, options in format_groups %}<optgroup label="{{ group }}">{% for o in options %}<option value="{{ o.key }}" data-kind="{{ o.kind }}" data-desc="{{ o.desc }}">{{ o.label }}</option>{% endfor %}</optgroup>{% endfor %}</select>
+    </label>
+  </div>
+  <p class="note fmtdesc" id="fmtdesc" aria-live="polite">{{ first_desc }}</p>
+  <label class="upchk" id="upone"><input type="checkbox" name="one_document" value="1"> <span>{{ t('up_one')|replace('{n}', long_max|string) }}</span></label>
+  <label class="drop updrop" id="updrop" for="files">
+    <span>{{ t('drop') }}</span>
+    <input id="files" class="sr" type="file" name="files" multiple accept="image/jpeg,image/png,image/webp,application/pdf,.jpg,.jpeg,.png,.webp,.pdf">
+  </label>
+  <div class="upbtns">
+    <label class="btn ghost" for="camera">{{ t('up_camera') }}</label>
+    <input id="camera" class="sr" type="file" name="files" accept="image/*" capture="environment">
+  </div>
+  <fieldset class="upkey" id="byok">
+    <legend>{{ t('byok_title') }}</legend>
+    <p class="note">{{ t('byok_note') }}</p>
+    <div class="uprow">
+      <label>{{ t('byok_provider') }}
+        <select name="byok_provider" id="byokprov"><option value="anthropic">Anthropic (Claude)</option><option value="gemini">Google (Gemini)</option></select>
+      </label>
+      <label>{{ t('byok_key') }}
+        <input type="password" name="byok_key" id="byokkey" autocomplete="off" spellcheck="false" maxlength="256" placeholder="sk-ant-...">
+      </label>
+    </div>
+    <label class="upchk"><input type="checkbox" id="byokremember"> <span>{{ t('byok_remember') }}</span></label>
+  </fieldset>
+  <ul class="uplist" id="uplist" aria-live="polite"></ul>
+  <p class="fine" id="upmsg" role="status"></p>
+  <p class="fine">{{ limits }}</p>
+  <div><button class="btn" type="submit" id="upsend">{{ t('up_submit') }}</button></div>
+</form>
+{% endblock %}
+{% block scripts %}<script src="/static/upload.js" defer></script>{% endblock %}

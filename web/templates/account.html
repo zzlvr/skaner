@@ -1,0 +1,40 @@
+{% extends "app_shell.html" %}
+{% block title %}{{ t('ac_title') }}{% endblock %}
+{% block app %}
+<h1 class="h1s">{{ t('ac_h') }}</h1>
+<p class="lead">{{ t('acc_p') }}</p>
+{% if error %}<p class="fine err" role="alert">{{ error }}</p>{% endif %}
+<section class="card acsec">
+  <h2 class="h2s">{{ t('ac_code') }}</h2>
+  <p class="accode">{{ user.account_code }}</p>
+  <p class="fine">{{ t('ac_code_hint') }}</p>
+</section>
+<section class="card acsec">
+  <h2 class="h2s">{{ t('ac_state') }}</h2>
+  {% for line in lines %}<p>{{ line }}</p>{% endfor %}
+  {% if user_lang %}<p class="fine">{{ t('lang_label') }}: {{ user_lang }}</p>{% endif %}
+  <div class="exp-row">
+    <a class="btn" href="/app">{{ t('acc_go') }}</a>
+    <a class="btn ghost" href="/app/plans">{{ t('nav_plans') }}</a>
+  </div>
+</section>
+<section class="card acsec">
+  <h2 class="h2s">{{ t('ac_stored_h') }}</h2>
+  <p>{{ stored }}</p>
+  <form method="post" action="/logout">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <button class="btn ghost" type="submit">{{ t('logout') }}</button>
+  </form>
+</section>
+<section class="card acsec">
+  <h2 class="h2s">{{ t('ac_del_h') }}</h2>
+  <p>{{ t('ac_del_p') }}</p>
+  <p>{{ t('ac_del_keep') }}</p>
+  <form class="acdel" method="post" action="/app/account/delete">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label for="confirm">{{ del_label }}</label>
+    <input id="confirm" name="confirm" type="text" maxlength="20" autocomplete="off" required>
+    <button class="btn ghost" type="submit">{{ t('ac_del_btn') }}</button>
+  </form>
+</section>
+{% endblock %}

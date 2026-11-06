@@ -1,0 +1,29 @@
+{% extends "app_shell.html" %}
+{% block title %}{{ t('join_title') }}{% endblock %}
+{% block app %}
+<h1 class="h1s">{{ t('join_h') }}</h1>
+{% if not valid %}
+<p class="lead">{{ t('join_bad') }}</p>
+<p><a class="btn ghost" href="/app">{{ t('acc_go') }}</a></p>
+{% else %}
+{% if error %}<p class="fine err" role="alert">{{ error }}</p>{% endif %}
+<section class="card acsec">
+  <p><b>{{ invite_text }}</b></p>
+  <p class="fine">{{ t('co_join_p') }}</p>
+  {% if in_org %}
+  <p class="note">{{ t('co_already') }}</p>
+  {% else %}
+  <div class="exp-row">
+    <form method="post" action="/join/{{ token }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <button class="btn" type="submit" name="answer" value="accept">{{ t('co_accept') }}</button>
+    </form>
+    <form method="post" action="/join/{{ token }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <button class="btn ghost" type="submit" name="answer" value="decline">{{ t('co_decline') }}</button>
+    </form>
+  </div>
+  {% endif %}
+</section>
+{% endif %}
+{% endblock %}

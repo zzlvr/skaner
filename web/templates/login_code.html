@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{{ t('code_title') }}{% endblock %}
+{% block main %}
+<section>
+  <div class="wrap narrow">
+    <h1 class="h1s">{{ t('code_h') }}</h1>
+    <p class="lead">{{ t('code_sent') }}</p>
+    <form class="signup stack" method="post" action="/login/code">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <label for="code">{{ t('code_label') }}</label>
+      <input id="code" type="text" name="code" inputmode="numeric" pattern="[0-9 ]{6,7}" maxlength="7" autocomplete="one-time-code" required autofocus>
+      <button class="btn" type="submit">{{ t('code_submit') }}</button>
+    </form>
+    {% if error %}<p class="fine err" role="alert">{{ error }}</p>{% endif %}
+    <p class="fine"><a href="/login">{{ t('code_again') }}</a></p>
+  </div>
+</section>
+{% endblock %}

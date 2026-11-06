@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}{% if lang == 'kk' %}Байланыс — Skaner{% elif lang == 'en' %}Contacts — Skaner{% else %}Контакты — Skaner{% endif %}{% endblock %}
+{% block head %}<link rel="stylesheet" href="/static/legal.css">{% endblock %}
+{% block main %}
+{% set T = {
+ 'ru': {'h': 'Контакты', 'who': 'Сервис Skaner предоставляет его владелец. Когда владелец зарегистрируется как индивидуальный предприниматель, его реквизиты появятся на этой странице и в счёте. Письменные претензии и запросы о персональных данных тоже присылайте через эту форму и указывайте код аккаунта.', 'lead': 'Вопрос, предложение, сообщение об ошибке или уязвимости: напишите нам, ответим по указанному вами контакту.',
+        'login': 'Чтобы написать нам, войдите в аккаунт. Вход по коду из письма, пароль не нужен.', 'go': 'Войти',
+        'l_contact': 'Как с вами связаться (телефон, WhatsApp или Telegram)', 'l_msg': 'Сообщение', 'send': 'Отправить',
+        'sent': 'Сообщение отправлено.', 'fine': 'Почту указывать не нужно: мы её не храним.',
+        'e_email': 'Не указывайте адрес почты: оставьте телефон, WhatsApp или Telegram.', 'e_text': 'В тексте есть недопустимые символы.',
+        'e_long': 'Слишком длинный текст.', 'e_short': 'Напишите чуть подробнее.', 'e_contact': 'Укажите контакт: телефон, WhatsApp или Telegram.',
+        'e_many': 'Слишком много сообщений за сутки, попробуйте позже.', 'e_plan': 'Не удалось отправить, попробуйте ещё раз.'},
+ 'kk': {'h': 'Байланыс', 'who': 'Skaner қызметін оның иесі ұсынады. Иесі жеке кәсіпкер ретінде тіркелгеннен кейін оның деректемелері осы бетте және шотта көрсетіледі. Жазбаша талаптар мен дербес деректер туралы сұрауларды да осы форма арқылы жіберіп, аккаунт кодын көрсетіңіз.', 'lead': 'Сұрақ, ұсыныс, қате немесе осалдық туралы хабар: бізге жазыңыз, көрсеткен байланысыңыз бойынша жауап береміз.',
+        'login': 'Бізге жазу үшін аккаунтқа кіріңіз. Кіру хаттағы код арқылы, құпиясөз керек емес.', 'go': 'Кіру',
+        'l_contact': 'Сізбен қалай байланысуға болады (телефон, WhatsApp немесе Telegram)', 'l_msg': 'Хабарлама', 'send': 'Жіберу',
+        'sent': 'Хабарлама жіберілді.', 'fine': 'Поштаны көрсетудің қажеті жоқ: біз оны сақтамаймыз.',
+        'e_email': 'Пошта мекенжайын көрсетпеңіз: телефон, WhatsApp немесе Telegram қалдырыңыз.', 'e_text': 'Мәтінде рұқсат етілмеген таңбалар бар.',
+        'e_long': 'Мәтін тым ұзын.', 'e_short': 'Сәл толығырақ жазыңыз.', 'e_contact': 'Байланысты көрсетіңіз: телефон, WhatsApp немесе Telegram.',
+        'e_many': 'Тәулік ішінде хабарлама тым көп, кейінірек көріңіз.', 'e_plan': 'Жіберу мүмкін болмады, қайталап көріңіз.'},
+ 'en': {'h': 'Contacts', 'who': 'The Skaner service is provided by its owner. Once the owner is registered as an individual entrepreneur, the legal details will be shown on this page and in the invoice. Send written claims and personal data requests through this form as well, with your account code.', 'lead': 'A question, a suggestion, a bug or a vulnerability report: write to us and we will reply at the contact you give.',
+        'login': 'To write to us, sign in. Sign-in is by a code sent to your email, no password needed.', 'go': 'Log in',
+        'l_contact': 'How to reach you (phone, WhatsApp or Telegram)', 'l_msg': 'Message', 'send': 'Send',
+        'sent': 'Message sent.', 'fine': 'There is no need to give your email: we do not store it.',
+        'e_email': 'Do not enter an email address: leave a phone, WhatsApp or Telegram.', 'e_text': 'The text contains characters that are not allowed.',
+        'e_long': 'The text is too long.', 'e_short': 'Please write a little more.', 'e_contact': 'Give a contact: phone, WhatsApp or Telegram.',
+        'e_many': 'Too many messages today, please try later.', 'e_plan': 'Could not send, please try again.'},
+} %}
+{% set X = T[lang] if lang in T else T['ru'] %}
+<section><div class="wrap prose">
+<h1>{{ X.h }}</h1>
+<p class="lead">{{ X.lead }}</p>
+<p>{{ X.who }}</p>
+{% if sent %}
+<p><b>{{ X.sent }}</b></p>
+{% elif user %}
+<form class="signup stack" method="post" action="/contacts">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <label for="c-contact">{{ X.l_contact }}</label>
+  <input id="c-contact" type="text" name="contact" value="{{ (values or {}).get('contact', '') }}" maxlength="160" required>
+  <label for="c-msg">{{ X.l_msg }}</label>
+  <textarea id="c-msg" name="message" rows="6" maxlength="2000" required>{{ (values or {}).get('message', '') }}</textarea>
+  <button class="btn" type="submit">{{ X.send }}</button>
+</form>
+{% if error %}<p class="fine err" role="alert">{{ X['e_' ~ error] or X.e_plan }}</p>{% endif %}
+<p class="fine">{{ X.fine }}</p>
+{% include "_consent.html" %}
+{% else %}
+<p>{{ X.login }}</p>
+<p><a class="btn" href="/login?next=/contacts">{{ X.go }}</a></p>
+{% endif %}
+</div></section>
+{% endblock %}

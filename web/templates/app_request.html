@@ -1,0 +1,26 @@
+{% extends "app_shell.html" %}
+{% block title %}{{ t('rq_title') }}{% endblock %}
+{% block app %}
+<h1 class="h1s">{{ t('rq_h') }}</h1>
+<p class="lead">{{ t('rq_p') }}</p>
+{% if error %}<p class="fine err" role="alert">{{ error }}</p>{% endif %}
+<form class="upform rqform" method="post" action="/app/plans/request">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <label>{{ t('rq_plan') }}
+    <select name="plan">{% for c in cards %}<option value="{{ c.key }}"{% if c.key == chosen %} selected{% endif %}>{{ c.name }} — {{ c.price }} {{ t('mo') }}, {{ c.pages }}</option>{% endfor %}</select>
+  </label>
+  <label>{{ t('rq_company') }}
+    <input name="company" type="text" maxlength="{{ company_max }}" value="{{ values.company or '' }}" autocomplete="organization">
+  </label>
+  <label>{{ t('rq_contact') }}
+    <input name="contact" type="text" minlength="3" maxlength="{{ contact_max }}" value="{{ values.contact or '' }}" required>
+    <span class="fine">{{ t('rq_contact_hint') }}</span>
+  </label>
+  <label>{{ t('rq_comment') }}
+    <textarea name="comment" rows="4" maxlength="{{ comment_max }}">{{ values.comment or '' }}</textarea>
+  </label>
+  <p class="fine">{{ t('rq_code')|replace('{code}', user.account_code or '') }}</p>
+  {% include "_consent.html" %}
+  <div><button class="btn" type="submit">{{ t('rq_send') }}</button></div>
+</form>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "app_shell.html" %}
+{% block title %}{{ t('ph_title') }}{% endblock %}
+{% block app %}
+{% if view == 'done' %}
+<h1 class="h1s">{{ t('ph_done_h') }}</h1>
+<p class="lead">{{ t('ph_done_p') }}</p>
+<p><a class="btn" href="/app">{{ t('acc_go') }}</a></p>
+{% elif view == 'not_needed' %}
+<h1 class="h1s">{{ t('ph_crumb') }}</h1>
+<p class="lead">{{ t('ph_not_needed') }}</p>
+<p><a class="btn" href="/app">{{ t('acc_go') }}</a></p>
+{% else %}
+<h1 class="h1s">{{ heading }}</h1>
+{% if error %}<p class="fine err" role="alert">{{ error }}</p>{% endif %}
+{% if outcome %}<p class="note" role="status">{{ outcome }}</p>{% endif %}
+<section class="card acsec">
+  {% if view == 'link' %}
+  <p>{{ t('ph_steps') }}</p>
+  <div class="exp-row">
+    <a class="btn" href="{{ link }}" target="_blank" rel="noopener noreferrer">{{ t('ph_open') }}</a>
+    <a class="btn ghost" href="/app/phone">{{ t('ph_check') }}</a>
+  </div>
+  <p class="fine">{{ valid }}</p>
+  {% elif view == 'pending' %}
+  <p>{{ t('ph_wait') }}</p>
+  <div class="exp-row">
+    <a class="btn ghost" href="/app/phone">{{ t('ph_check') }}</a>
+    <form method="post" action="/app/phone">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <button class="btn ghost" type="submit">{{ t('ph_new') }}</button>
+    </form>
+  </div>
+  {% else %}
+  <p>{{ t('ph_p') }}</p>
+  <form method="post" action="/app/phone">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <button class="btn" type="submit">{{ t('ph_get') }}</button>
+  </form>
+  {% endif %}
+  <p class="fine">{{ t('ph_privacy') }}</p>
+  {% include "_consent.html" %}
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "admin_base.html" %}
+{% block admin %}
+<h1 class="h1s">Users</h1>
+{% if error %}<p class="fine err" role="alert">{{ error }}</p>{% endif %}
+<div class="admforms">
+  <form class="admform" method="get" action="/admin/users">
+    <label>Account code <input name="code" type="text" maxlength="12" placeholder="SK-XXXXXX" autocomplete="off"></label>
+    <button class="btn ghost" type="submit">Find</button>
+  </form>
+  <form class="admform" method="post" action="/admin/users/find">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label>Email <input name="email" type="email" maxlength="254" autocomplete="off"></label>
+    <button class="btn ghost" type="submit">Find</button>
+  </form>
+</div>
+<p class="fine">The email is not stored or logged: a fingerprint is computed from it and the account is found by that.</p>
+<div class="tblwrap"><table class="hist">
+  <thead><tr><th scope="col">Code</th><th scope="col">Created (UTC)</th><th scope="col">Sign-in</th><th scope="col">Plan</th><th scope="col">Pages</th><th scope="col">Block</th></tr></thead>
+  <tbody>
+  {% for u in items %}
+  <tr><td><a href="/admin/users/{{ u.code }}">{{ u.code }}</a>{% if u.me %} <b>(you)</b>{% endif %}</td><td>{{ u.created }}</td><td>{{ u.login }}</td><td>{{ u.plan }}</td><td>{{ u.pages }}</td><td>{% if u.blocked %}yes{% endif %}</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+<p class="fine">The last 50 accounts.</p>
+{% endblock %}

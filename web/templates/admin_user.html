@@ -1,0 +1,97 @@
+{% extends "admin_base.html" %}
+{% block admin %}
+<nav class="bc" aria-label="Navigation"><a href="/admin/users">Users</a><span aria-hidden="true">/</span><span aria-current="page">{{ target.account_code }}</span></nav>
+<h1 class="h1s">{{ target.account_code }}{% if is_me %} <span class="fine">(you)</span>{% endif %}</h1>
+{% if done %}<p class="note" role="status">{{ done }}</p>{% endif %}
+{% if error %}<p class="fine err" role="alert">{{ error }}</p>{% endif %}
+<div class="tblwrap"><table class="hist kv">
+  <tbody>{% for k, v in info %}<tr><th scope="row">{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}</tbody>
+</table></div>
+
+<h2 class="h2s">Actions</h2>
+<p class="fine">Every action is written to the log. Do not put contacts or email in notes.</p>
+<div class="admacts">
+  <form class="card admform" method="post" action="/admin/users/{{ target.account_code }}/plan">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <b>Switch a plan on for {{ plan_days }} days</b>
+    <label>Plan <select name="plan">{% for k, label in plans %}<option value="{{ k }}">{{ label }}</option>{% endfor %}</select></label>
+    <label>Note <input name="note" type="text" maxlength="200"></label>
+    <button class="btn" type="submit">Switch on</button>
+  </form>
+  <form class="card admform" method="post" action="/admin/users/{{ target.account_code }}/topup">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <b>Add pages (no expiry)</b>
+    <label>Pages <input name="pages" type="number" min="1" max="{{ max_topup }}" required></label>
+    <label>Note <input name="note" type="text" maxlength="200"></label>
+    <button class="btn ghost" type="submit">Add</button>
+  </form>
+  {% if plan_active %}
+  <form class="card admform" method="post" action="/admin/users/{{ target.account_code }}/extend">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <b>Extend the plan</b>
+    <label>Days <input name="days" type="number" min="1" max="{{ max_extend }}" required></label>
+    <label>Note <input name="note" type="text" maxlength="200"></label>
+    <button class="btn ghost" type="submit">Extend</button>
+  </form>
+  {% endif %}
+  {% if target.plan %}
+  <form class="card admform" method="post" action="/admin/users/{{ target.account_code }}/end-plan">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <b>End the plan now</b>
+    <label>Note <input name="note" type="text" maxlength="200"></label>
+    <button class="btn ghost" type="submit">End</button>
+  </form>
+  {% endif %}
+  <form class="card admform" method="post" action="/admin/users/{{ target.account_code }}/trial">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <b>Trial (from now)</b>
+    <label>Pages <input name="pages" type="number" min="0" max="{{ max_trial_pages }}" value="50" required></label>
+    <label>Days <input name="days" type="number" min="0" max="{{ max_trial_days }}" value="14" required></label>
+    <label>Note <input name="note" type="text" maxlength="200"></label>
+    <button class="btn ghost" type="submit">Set</button>
+  </form>
+  {% if phone_reset %}
+  <form class="card admform" method="post" action="/admin/users/{{ target.account_code }}/phone-reset">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <b>Remove the phone binding</b>
+    <span class="fine">For people who changed their number: the number can be confirmed again. Pages do not change.</span>
+    <button class="btn ghost" type="submit">Remove binding</button>
+  </form>
+  {% endif %}
+  {% if org_member %}
+  <form class="card admform" method="post" action="/admin/users/{{ target.account_code }}/leave-org">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <b>Remove from the company</b>
+    <span class="fine">Access to the company and its pages closes at once. Their uploads in the company stay with the owner.</span>
+    <button class="btn ghost" type="submit">Remove from the company</button>
+  </form>
+  {% endif %}
+  {% if not is_self %}
+  <form class="card admform" method="post" action="/admin/users/{{ target.account_code }}/{{ 'unblock' if target.blocked_at else 'block' }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <b>{{ 'Unblock' if target.blocked_at else 'Block' }}</b>
+    <span class="fine">A blocked user cannot sign in or upload files.</span>
+    <button class="btn ghost" type="submit">{{ 'Unblock' if target.blocked_at else 'Block' }}</button>
+  </form>
+  <form class="card admform" method="post" action="/admin/users/{{ target.account_code }}/delete">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <b>Delete the user and all data</b>
+    <span class="fine">Charge records stay without a link; the trial is not given again.</span>
+    <label>Enter the account code <input name="confirm" type="text" maxlength="12" autocomplete="off" required></label>
+    <button class="btn ghost" type="submit">Delete</button>
+  </form>
+  {% endif %}
+</div>
+
+<h2 class="h2s">Latest uploads</h2>
+<div class="tblwrap"><table class="hist">
+  <thead><tr><th scope="col">Date (UTC)</th><th scope="col">Kind</th><th scope="col">Type</th><th scope="col">Pages</th><th scope="col">Status</th><th scope="col">Error</th></tr></thead>
+  <tbody>{% for b in batches %}<tr><td>{{ b.date }}</td><td>{{ b.kind }}</td><td>{{ b.doctype }}</td><td>{{ b.pages }}</td><td>{{ b.status }}</td><td>{{ b.error }}</td></tr>{% endfor %}</tbody>
+</table></div>
+
+<h2 class="h2s">Page ledger</h2>
+<div class="tblwrap"><table class="hist">
+  <thead><tr><th scope="col">Date (UTC)</th><th scope="col">Reason</th><th scope="col">Trial</th><th scope="col">Plan</th><th scope="col">Extra</th><th scope="col">Charged</th><th scope="col">Not covered</th><th scope="col">Note</th></tr></thead>
+  <tbody>{% for r in ledger %}<tr><td>{{ r.date }}</td><td>{{ r.reason }}</td><td>{{ r.trial }}</td><td>{{ r.plan }}</td><td>{{ r.paid }}</td><td>{{ r.charged }}</td><td>{{ r.overrun }}</td><td>{{ r.note }}</td></tr>{% endfor %}</tbody>
+</table></div>
+{% endblock %}

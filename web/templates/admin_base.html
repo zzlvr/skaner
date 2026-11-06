@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Admin — Skaner{% endblock %}
+{% block head %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% block main %}
+<div class="wrap shell">
+  <aside class="snav" aria-label="Admin">
+    <nav>
+      <a href="/admin"{% if nav == 'home' %} aria-current="page"{% endif %}>Summary</a>
+      <a href="/admin/users"{% if nav == 'users' %} aria-current="page"{% endif %}>Users</a>
+      <a href="/admin/requests"{% if nav == 'requests' %} aria-current="page"{% endif %}>Requests</a>
+      <a href="/admin/audit"{% if nav == 'audit' %} aria-current="page"{% endif %}>Log</a>
+      <a href="/app">Cabinet</a>
+    </nav>
+    <form class="logout" method="post" action="/logout">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <button class="btn ghost" type="submit">Log out</button>
+    </form>
+  </aside>
+  <div class="spane adm">
+    {% block admin %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

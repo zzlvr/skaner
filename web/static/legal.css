@@ -1,0 +1,19 @@
+/* Legal and information pages (privacy, terms, security). Uses the variables from app.css. */
+.prose{max-width:720px}
+.prose h1{font-size:2rem;letter-spacing:-.03em;margin-bottom:6px}
+.prose .meta{color:var(--muted);font-size:.9rem;margin:0 0 28px}
+.prose h2{font-size:1.2rem;letter-spacing:-.01em;margin:30px 0 8px;max-width:none}
+.prose p,.prose li{line-height:1.65}
+.prose ul{padding-left:20px;margin:8px 0}
+.prose li{margin:6px 0}
+.prose .lead{font-size:1.05rem;color:var(--muted);margin:0 0 6px}
+.prose a{color:var(--acc);text-decoration:underline}
+.prose code{background:var(--soft);border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:.85em}
+
+/* Contacts form: a textarea in the same look as the single-line inputs */
+.signup.stack textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit;resize:vertical}
+.signup.stack textarea:focus{outline:2px solid var(--acc);outline-offset:1px}
+.prose .signup.stack{max-width:520px}
+
+/* A link that looks like a button keeps the button's own colours (the .prose link rule must not repaint it) */
+.prose a.btn{color:var(--acc-ink);text-decoration:none}

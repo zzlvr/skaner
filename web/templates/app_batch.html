@@ -1,0 +1,116 @@
+{% extends "app_shell.html" %}
+{% block title %}{{ title }} — Skaner{% endblock %}
+{% block head %}{% if active %}<noscript><meta http-equiv="refresh" content="5"></noscript>{% endif %}{% endblock %}
+{% block app %}
+<h1 class="h1s">{{ title }}</h1>
+<p class="fine">{{ date }} UTC · {{ t('b_files')|replace('{n}', batch.files_count|string) }}{% if author %} · {{ author }}{% endif %}</p>
+
+{% if active %}
+<section class="card bstat" id="bstat" data-url="/app/batches/{{ batch.public_id }}/status" data-tpl="{{ t('b_progress') }}">
+  <p><b id="bstate">{{ status_label }}</b></p>
+  <progress id="bprog" max="{{ batch.files_count }}" value="{{ batch.files_done }}"></progress>
+  <p class="fine" id="btext">{{ progress }}</p>
+  <p class="fine">{{ t('b_wait') }}</p>
+</section>
+{% elif batch.status == 'failed' %}
+<section class="card">
+  <p><b>{{ status_label }}</b></p>
+  <p class="fine err">{{ error_text }}</p>
+  <p class="fine">{{ t('b_charged')|replace('{n}', batch.pages_charged|string) }}</p>
+  <p><a class="btn" href="/app">{{ t('b_again') }}</a></p>
+</section>
+{% elif kind != 'table' %}
+<section class="card">
+  <div class="bsum">
+    <b>{{ status_label }}</b>
+    <span>{{ t('b_charged')|replace('{n}', batch.pages_charged|string) }}</span>
+    {% if batch.failed_files %}<span class="st warn"><i>!</i>{{ t('b_pages_failed')|replace('{n}', batch.failed_files|string) }}</span>{% endif %}
+  </div>
+  <p class="fine bwhat">{{ what }}</p>
+  {% if unreadable %}
+  <p class="fine err">{{ t('b_unreadable') }}</p>
+  {% elif file_gone %}
+  <p class="fine err">{{ file_gone_text }}</p>
+  {% else %}
+  <div class="exp-row"><a class="btn" href="/app/batches/{{ batch.public_id }}/download?fmt={{ batch.fmt }}">{{ t('b_download_pdf') }}</a></div>
+  {% endif %}
+  {% if kind == 'scan' %}{% if not file_gone %}<p class="fine">{{ file_left }}</p>{% endif %}
+  {% else %}<p class="fine">{{ t('b_retention')|replace('{n}', retention_days|string) }}</p>{% endif %}
+</section>
+{% else %}
+<section class="card">
+  <div class="bsum">
+    <b>{{ status_label }}</b>
+    <span>{{ t('b_docs')|replace('{n}', batch.docs_found|string) }}</span>
+    {% if batch.needs_review %}<span class="st warn"><i>!</i>{{ t('b_review')|replace('{n}', batch.needs_review|string) }}</span>{% elif batch.docs_found %}<span class="st ok"><i>✓</i>{{ t('b_no_review') }}</span>{% endif %}
+    <span>{{ t('b_charged')|replace('{n}', batch.pages_charged|string) }}</span>
+    {% if batch.failed_files %}<span>{{ t('b_failed_files')|replace('{n}', batch.failed_files|string) }}</span>{% endif %}
+    {% if batch.not_found %}<span>{{ t('b_not_found')|replace('{n}', batch.not_found|string) }}</span>{% endif %}
+  </div>
+  {% if unreadable %}
+  <p class="fine err">{{ t('b_unreadable') }}</p>
+  {% elif batch.docs_found == 0 %}
+  <p class="fine err">{{ t('b_nothing') }}</p>
+  {% else %}
+  <div class="exp-row">
+    {% for key, label in formats %}<a class="btn{% if key != batch.fmt %} ghost{% endif %}" href="/app/batches/{{ batch.public_id }}/download?fmt={{ key }}">{{ t('b_download') }} {{ label }}</a>{% endfor %}
+  </div>
+  {% endif %}
+  <p class="fine">{{ t('b_retention')|replace('{n}', retention_days|string) }}</p>
+</section>
+
+{% if docs %}
+<div class="docs">
+  {% for d in docs %}
+  <article class="card doc">
+    <h3><span>{{ loop.index }}. {{ d.name }}</span>
+      {% if d.failed %}<span class="st warn"><i>!</i>{{ t('b_doc_failed') }}</span>
+      {% elif not d.found %}<span class="st warn"><i>!</i>{{ t('b_doc_empty') }}</span>
+      {% elif d.review %}<span class="st warn"><i>!</i>{{ t('b_doc_check') }}</span>
+      {% else %}<span class="st ok"><i>✓</i>{{ t('b_doc_ok') }}</span>{% endif %}
+    </h3>
+    {% if d.issues %}
+    <ul class="issues">
+      {% for i in d.issues %}<li class="st {{ 'warn' if i.check else 'note-i' }}">{% if i.check %}<i>!</i>{% endif %}<span><b>{{ i.field }}</b>: {{ i.message }}</span></li>{% endfor %}
+    </ul>
+    {% endif %}
+    {% if d.fields %}
+    <div class="tblwrap"><table class="kv">
+      <tbody>{% for f in d.fields %}<tr{% if f.flag %} class="flag"{% endif %}><th scope="row">{{ f.label }}</th><td>{{ f.value }}</td></tr>{% endfor %}</tbody>
+    </table></div>
+    {% endif %}
+    {% if d.lines %}
+    <div class="tblwrap"><table class="items">
+      <thead><tr>{% for c in d.item_cols %}<th scope="col">{{ c }}</th>{% endfor %}</tr></thead>
+      <tbody>{% for row in d.lines %}<tr{% if row.flag %} class="flag"{% endif %}>{% for cell in row.cells %}<td>{{ cell }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+    </table></div>
+    {% endif %}
+  </article>
+  {% endfor %}
+</div>
+{% endif %}
+{% endif %}
+
+{% if not active %}
+<form class="bdel" method="post" action="/app/batches/{{ batch.public_id }}/delete">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <button class="btn ghost" type="submit">{{ t('b_delete') }}</button>
+</form>
+{% endif %}
+{% if not active %}
+<details class="card fbk"{% if fb %} open{% endif %}>
+  <summary>{{ t('fb_title') }}</summary>
+  {% if fb == 'sent' %}<p class="note" role="status">{{ t('fb_sent') }}</p>{% elif fb %}<p class="fine err" role="alert">{{ t('fb_' ~ fb) }}</p>{% endif %}
+  <form class="stack" method="post" action="/app/batches/{{ batch.public_id }}/feedback">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label for="fb-kind">{{ t('fb_kind') }}</label>
+    <select id="fb-kind" name="kind">{% for key, label in fb_kinds %}<option value="{{ key }}">{{ label }}</option>{% endfor %}</select>
+    <label for="fb-comment">{{ t('fb_comment') }}</label>
+    <textarea id="fb-comment" name="comment" rows="3" maxlength="1000"></textarea>
+    <button class="btn ghost" type="submit">{{ t('fb_send') }}</button>
+  </form>
+  <p class="fine">{{ t('fb_note') }}</p>
+</details>
+{% endif %}
+{% endblock %}
+{% block scripts %}{% if active %}<script src="/static/upload.js" defer></script>{% endif %}{% endblock %}
