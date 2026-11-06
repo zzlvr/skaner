@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}{{ t('nf404_title') }}{% endblock %}
+{% block main %}
+<section>
+  <div class="wrap narrow">
+    <p class="fine">404</p>
+    <h1 class="h1s">{{ t('nf404_h') }}</h1>
+    <p class="lead">{{ t('nf404_p') }}</p>
+    <a class="btn" href="/">{{ t('back') }}</a>
+  </div>
+</section>
+{% endblock %}

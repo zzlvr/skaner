@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block main %}
+<section class="hero">
+  <div class="rib r1"></div><div class="rib r2"></div><div class="rib r3"></div>
+  <div class="wrap">
+    <h1>{{ t('h1a') }} <span>{{ t('h1b') }}</span></h1>
+    <p class="lead">{{ t('lead') }}</p>
+    <form class="signup" method="post" action="/login">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <label class="sr" for="hero-email">{{ t('email_label') }}</label>
+      <input id="hero-email" type="email" name="email" placeholder="{{ t('email_ph') }}" autocomplete="email" required>
+      <button class="btn" type="submit">{{ t('try') }}</button>
+    </form>
+    <p class="fine">{{ t('fine') }}</p>
+    {% include "_consent.html" %}
+
+    <div class="win demo" aria-hidden="true">
+      <div class="chrome"><i></i><i></i><i></i><span>{{ t('win_url') }}</span></div>
+      <div class="app">
+        <aside class="side">
+          <div class="sb-brand">skaner</div>
+          <div class="sb-item n1">{{ t('nav_up') }}</div>
+          <div class="sb-item n2">{{ t('nav_docs') }}</div>
+          <div class="sb-item">{{ t('nav_hist') }}</div>
+          <div class="sb-item">{{ t('nav_plans') }}</div>
+        </aside>
+        <div class="mainp">
+          <div class="crumbs"><span class="c1">{{ t('nav_up') }}</span><span class="c2">{{ t('nav_docs') }} / akt_127.pdf</span><i class="av">А</i></div>
+          <div class="stages">
+            <div class="stage s1">
+              <div class="up-title">{{ t('up_title') }}</div>
+              <div class="dz">{{ t('drop') }}</div>
+              <div class="frow"><span class="fn">akt_127.pdf</span><span class="fs">1 PDF</span><span class="pbar"><b></b></span><span class="stt"><em class="t1">{{ t('up_progress') }}</em><em class="t2">{{ t('up_reading') }}</em></span></div>
+            </div>
+            <div class="stage s2">
+              <div class="split">
+                <div class="paper">
+                  <b class="ttl">АКТ ВЫПОЛНЕННЫХ РАБОТ № 127</b>
+                  <span class="ctr">от 14.10.2026 · Договор № 45/26<u class="bx bxw"></u></span>
+                  <span>Исполнитель: ТОО «Пример Софт», БИН 210540010008</span>
+                  <span>Заказчик: ТОО «Образец Групп», БИН 210540010018</span>
+                  <hr>
+                  <div class="ln"><span>Разработка модуля учёта</span><span>1 усл.</span><span>850 000</span><u class="bx bx1"></u></div>
+                  <div class="ln"><span>Техническая поддержка</span><span>1 мес.</span><span>150 000</span><u class="bx bx2"></u></div>
+                  <hr>
+                  <div class="ln"><span>НДС 16%</span><span></span><span>160 000</span><u class="bx bx3"></u></div>
+                  <div class="ln tot"><span>Всего</span><span></span><span>1 160 000</span><u class="bx bx4"></u></div>
+                </div>
+                <div class="sheet">
+                  <div class="skel"><b></b><b></b><b></b><b></b><b></b></div>
+                  <table>
+                    <tr class="thead"><th>{{ t('col_name') }}</th><th>{{ t('col_qty') }}</th><th>{{ t('col_sum') }}</th></tr>
+                    <tr class="tr1"><td>Разработка модуля учёта</td><td>1</td><td>850 000</td></tr>
+                    <tr class="tr2"><td>Техническая поддержка</td><td>1</td><td>150 000</td></tr>
+                    <tr class="tr3"><td>НДС 16%</td><td></td><td>160 000</td></tr>
+                    <tr class="tot tr4"><td>Всего</td><td></td><td>1 160 000</td></tr>
+                  </table>
+                  <div class="st ok chk chk1"><i>✓</i> {{ t('st_ok1') }}</div>
+                  <div class="st ok chk chk2"><i>✓</i> {{ t('st_ok2') }}</div>
+                  <div class="st warn chk chk3"><i>!</i> {{ t('st_warn') }}</div>
+                  <div class="exp"><span class="btn xs btn-x">Excel</span><span class="btn xs ghost">1С</span><span class="btn xs ghost">CSV</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="drag">akt_127.pdf</div>
+            <svg class="cur" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 2l12 7-5.2 1.4L7.6 16z" fill="#0a2540" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/></svg>
+            <div class="toast">✓ akt_127.xlsx — {{ t('toast_ok') }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="feat" class="alt">
+  <div class="wrap">
+    <div class="eyebrow">{{ t('eyebrow_feat') }}</div>
+    <h2 data-reveal>{{ t('feat_h') }}</h2>
+    <div class="bento">
+      <div class="card b4" data-reveal>
+        <h3>{{ t('f1_h') }}</h3><p>{{ t('f1_p') }}</p>
+        <div class="drop">{{ t('drop') }}</div>
+        <div class="files"><span>akt_127.pdf</span><span>chek_4821.jpg</span><span>schet_88.pdf</span></div>
+      </div>
+      <div class="card b2" data-reveal>
+        <h3>{{ t('f2_h') }}</h3><p>{{ t('f2_p') }}</p>
+        {% for n in ('1','2','3','4') %}<div class="st ok"><i>✓</i> {{ t('chk'+n) }}</div>{% endfor %}
+        <div class="st warn"><i>!</i> {{ t('chk5') }}</div>
+      </div>
+      <div class="card b3" data-reveal>
+        <h3>{{ t('f3_h') }}</h3><p>{{ t('f3_p') }}</p>
+        <div class="chips">{% for n in ('1','2','3','4') %}<span>{{ t('d'+n) }}</span>{% endfor %}</div>
+      </div>
+      <div class="card b3" data-reveal>
+        <h3>{{ t('f4_h') }}</h3><p>{{ t('f4_p') }}</p>
+        <div class="chips"><span>Excel</span><span>1С</span><span>CSV</span><span>JSON</span><span>{{ t('chip_pdf_text') }}</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="eyebrow">{{ t('eyebrow_how') }}</div>
+    <h2>{{ t('how_h') }}</h2>
+    <div class="steps">
+      {% for n in ('1','2','3') %}
+      <div class="card" data-reveal><span class="num">{{ n }}</span><h3>{{ t('s'+n+'_h') }}</h3><p>{{ t('s'+n+'_p') }}</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section id="prices" class="alt">
+  <div class="wrap">
+    <div class="eyebrow">{{ t('eyebrow_prices') }}</div>
+    <h2>{{ t('prices_h') }}<br><span>{{ t('prices_sub') }}</span></h2>
+    <div class="plans">
+      {% for k in ('start','biz','firm') %}
+      <div class="card{% if k == 'biz' %} feat{% endif %}" data-reveal>
+        <h3>{{ t('plan_'+k) }}</h3>
+        <p class="price">{{ t('price_'+k) }}<small> {{ t('mo') }}</small></p>
+        <p>{{ t('pages_'+k) }}</p>
+        <p class="muted">{{ t('over_'+k) }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    <p class="muted">{{ t('prices_note') }}</p>
+  </div>
+</section>
+{% endblock %}

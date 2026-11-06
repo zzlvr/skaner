@@ -1,0 +1,30 @@
+{% extends "admin_base.html" %}
+{% block admin %}
+<h1 class="h1s">Summary for {{ today }} (UTC)</h1>
+<p class="fine">Your accounts (from WEB_ADMIN_EMAILS): sign-ins and uploads are left out of the summary. The daily caps still count your pages, because they cost real money.</p>
+<div class="tblwrap"><table class="hist">
+  <tbody>
+  <tr><th scope="row">Users in total / new today</th><td>{{ stats.users }} / {{ stats.users_today }}</td></tr>
+  <tr><th scope="row">Uploads today / failed</th><td>{{ stats.batches_today }} / {{ stats.failed_today }}</td></tr>
+  <tr><th scope="row">Recognised pages today / cap</th><td>{{ stats.pages_today }} / {{ stats.pages_cap }} (trial pages today: {{ stats.trial_today }} of {{ stats.trial_cap }})</td></tr>
+  <tr><th scope="row">Free scan pages today / cap</th><td>{{ stats.scan_today }} / {{ stats.scan_cap }}</td></tr>
+  <tr><th scope="row">Pages charged today / not covered by the balance</th><td>{{ stats.charged_today }} / {{ stats.overrun_today }}</td></tr>
+  <tr><th scope="row">New payment requests</th><td><a href="/admin/requests">{{ stats.pending }}</a></td></tr>
+  </tbody>
+</table></div>
+<p class="fine">Upload: one press of the Upload button, with up to 20 files. The user gets one result for it.</p>
+<h2 class="h2s">Quality over 30 days (without your uploads)</h2>
+{% if quality %}
+<div class="tblwrap"><table class="hist">
+  <thead><tr><th scope="col">Type</th><th scope="col">Uploads</th><th scope="col">Documents</th><th scope="col">To check</th><th scope="col">Failed files</th></tr></thead>
+  <tbody>{% for r in quality %}<tr><th scope="row">{{ r.name }}</th><td>{{ r.batches }}</td><td>{{ r.docs }}</td><td>{{ r.review }} ({{ r.share }})</td><td>{{ r.failed }}</td></tr>{% endfor %}</tbody>
+</table></div>
+{% else %}<p class="fine">No customer uploads yet.</p>{% endif %}
+<p class="fine">"To check": documents where the service itself flagged a doubt (amounts, VAT, BIN). These are not errors, but places worth a look. Reports of a problem with a result in 30 days: <a href="/admin/requests">{{ stats.feedback_30d }}</a>. The contents of documents are not stored here.</p>
+<h2 class="h2s">Configuration</h2>
+<div class="tblwrap"><table class="hist">
+  <tbody>
+  {% for name, ok in config %}<tr><th scope="row">{{ name }}</th><td>{% if ok %}<span class="st ok"><i>✓</i>configured</span>{% else %}not configured{% endif %}</td></tr>{% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}

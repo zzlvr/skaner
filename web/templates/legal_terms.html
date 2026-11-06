@@ -1,0 +1,367 @@
+{% extends "base.html" %}
+{% block title %}{% if lang == 'kk' %}Шарттар — Skaner{% elif lang == 'en' %}Terms — Skaner{% else %}Условия — Skaner{% endif %}{% endblock %}
+{% block head %}<link rel="stylesheet" href="/static/legal.css">{% endblock %}
+{% block main %}
+<section><div class="wrap prose">
+{% if lang == 'kk' %}
+<h1>Пайдалану шарттары</h1>
+<p class="meta">Редакция: 2026 жылғы 6 қараша</p>
+<p class="lead">Қысқаша: қызмет бизнеске арналған, нәтижелерді тексеру керек, біздің жауапкершілігіміз шектелген. Толығырақ — төменде.</p>
+
+<h2>1. Қызмет және оны кім ұсынады</h2>
+<ul>
+<li>Skaner чектердің, шоттардың, орындалған жұмыстар актілерінің және жүкқұжаттардың фотосы мен PDF-ін деректерге айналдырады: Excel, 1С, CSV, JSON және PDF файлдары.</li>
+<li>Қызметті оның иесі ұсынады (бұдан әрі — «біз»), байланыс — «Байланыс» беті арқылы. Иесі жеке кәсіпкер ретінде тіркелгеннен кейін оның деректемелері «Байланыс» бетінде және шотта көрсетіледі.</li>
+<li>Бұл шарттар — skaner.app сайтын пайдалану туралы сіз бен біздің арамыздағы келісім. Аккаунтқа кіріп, қызметті пайдалана отырып, сіз оларды қабылдайсыз. Деректерді қалай өңдейтініміз Құпиялылық саясатында сипатталған, ол осы шарттардың бөлігі болып табылады.</li>
+</ul>
+
+<h2>2. Қызмет кімге арналған</h2>
+<ul>
+<li>Қызмет ең алдымен іскерлік құжаттарға арналған: чектер, шот-фактуралар, актілер, жүкқұжаттар. Оны бухгалтериялар, компаниялар, кәсіпкерлер және жеке тұлғалар пайдалана алады.</li>
+<li>Қызметті жеке қажеттілікке пайдалансаңыз, заң тұтынушыларға беретін құқықтар сізде қалады: осы шарттардың ешқайсысы оларды шектемейді. Ұйым атынан әрекет етсеңіз, бұған құқығыңыз бар екенін растайсыз.</li>
+</ul>
+
+<h2>3. Аккаунт және кіру</h2>
+<ul>
+<li>Кіру эл. поштаға келетін бір реттік кодпен жүзеге асады. Поштаңызға қолжетімділікке және аккаунтыңыздағы әрекеттерге өзіңіз жауаптысыз.</li>
+<li>Бір аккаунт — бір адамға немесе бір ұйымға. Қолжетімділікті бөгде адамдарға бермеңіз және бір аккаунтты бір-бірімен байланысы жоқ бірнеше компания пайдаланбасын: команда үшін компания кабинеті бар.</li>
+<li>Аккаунтыңызға басқа біреу кірді деп күдіктенсеңіз, «Байланыс» арқылы бізге хабарлаңыз.</li>
+</ul>
+
+<h2>4. Өз кілтіңізбен тегін пайдалану</h2>
+<ul>
+<li>Тегін сынақ мерзімі жоқ.</li>
+<li>Өз Anthropic немесе Google (Gemini) API кілтіңізбен тегін пайдалануға болады: өңдеу провайдердегі сіздің аккаунтыңыз арқылы өтеді. Провайдердегі шығындар мен оның шарттары сіздікі, біз оларға жауап бермейміз.</li>
+<li>Өз кілтіңізсіз өңдеу біздің аккаунт арқылы өтеді және тарифтер бойынша төленеді.</li>
+<li>Кілт үшін өзіңіз жауап бересіз. Бізге артық құқықтары бар немесе шығыс лимитісіз кілт бермеңіз: лимиті бар жеке кілт жасаңыз. Нәтиженің сапасы таңдалған модельге байланысты; нәтижені тексеру керек.</li>
+</ul>
+
+<h2>5. Беттер және олар қалай есептеледі</h2>
+<ul>
+<li>Тану беттермен төленеді. 1 фото немесе PDF-тің 1 беті = 1 бет. Бір фотода бірнеше құжат болса, құжат санына қарай есептеледі; бірнеше фотодан тұратын ұзын чек — фото санына қарай.</li>
+<li>Өте тығыз бет (жолдары көп) бірнеше бет болып есептелуі мүмкін. Қанша бет есептен шығарылғаны жүктеу нәтижесінде көрсетіледі.</li>
+<li>Есептен шығарылмайды: өңдеуге дейін қабылданбаған файлдар; тану қызметі жауап бермеген беттер; біздің сервер қайта іске қосылуына байланысты үзілген өңдеу. Егер бет тану орындалғаннан кейін қатемен аяқталса, мұндай беттер тәулігіне 3 ретке дейін тегін, одан асқаны есептен шығарылады.</li>
+<li>Алдымен тариф беттері, содан кейін қосымша беттер жұмсалады.</li>
+<li>Сайттың жалпы күндік өңдеу көлемі бар. Ол таусылса, жаңа жүктеулерді келесі күні жасауға болады.</li>
+</ul>
+
+<h2>6. Тарифтер және төлем</h2>
+<ul>
+<li>Тарифтер мен бағалар теңгемен кабинеттегі «Тарифтер» бетінде көрсетілген. Өтінім берілген кездегі баға қолданылады.</li>
+<li>Онлайн төлем әзірге жоқ. Сіз «Төлегім келеді» өтінімін қалдырасыз, біз көрсетілген байланыс бойынша хабарласып, шот жібереміз. Тариф төлем түскеннен кейін қолмен қосылады.</li>
+<li>Тариф қосылған сәттен бастап 30 күн жарамды. Тарифтің пайдаланылмаған беттері мерзім соңында күйеді және ауыстырылмайды. Жаңа тариф ағымдағы тариф аяқталғанға дейін қосылса, қалған беттер жаңа тарифке қосылады, ал мерзім қайтадан есептеледі.</li>
+<li>Тарифтен тыс беттер автоматты түрде есептен шығарылмайды: олардың санын және төлемін сізбен келісеміз, содан кейін беттерді қолмен қосамыз. Мұндай қосымша беттердің аккаунт бар болғанша мерзімі жоқ.</li>
+<li>Аккаунт жойылғанда қалған беттер мен тариф жойылады.</li>
+</ul>
+
+<h2>7. Қайтару</h2>
+<ul>
+<li>Қызметтің ақауына байланысты өңделмеген беттер есептен шығарылмайды (5-бөлім).</li>
+<li>Басқа жағдайларда тариф пен беттер үшін төлем қайтарылмайды, заң қайтаруды талап ететін жағдайларды немесе біз оны өз шешімімізбен қайтаратын жағдайларды қоспағанда. Қайтаруды сұрау үшін «Байланыс» арқылы жазып, аккаунт кодын көрсетіңіз.</li>
+</ul>
+
+<h2>8. Нәтижелерді тексеру қажет</h2>
+<ul>
+<li>Тану автоматты түрде орындалады және қате немесе толық емес болуы мүмкін: қате сандар, түсіп қалған жолдар, ауысып кеткен деректемелер. Біз нәтижелердің дәлдігіне, толықтығына және қандай да бір мақсатқа жарамдылығына кепілдік бермейміз.</li>
+<li>Нәтижені есепте, есептілікте, салық, заң немесе төлем мақсаттарында пайдаланбас бұрын бастапқы құжатпен салыстырып тексеріңіз. Әсіресе «тексеріңіз» деп белгіленген өрістерді. Қызметтегі сомалар мен деректемелерді тексеру көмектеседі, бірақ сіздің тексеруіңізді алмастырмайды.</li>
+<li>Skaner бухгалтерлік, салықтық және заң қызметтерін көрсетпейді және кеңес бермейді. Нәтижелер негізінде шешімді сіз қабылдайсыз.</li>
+</ul>
+
+<h2>9. Құжаттарыңыз және деректер</h2>
+<ul>
+<li>Құжаттарыңыз бен нәтижелерге құқықтар сізде қалады. Сіз бізге оларды тек сізге нәтиже беру үшін, Құпиялылық саясатында сипатталғандай өңдеуге рұқсат бересіз.</li>
+<li>Құжаттардағы дербес деректер үшін сіз меншік иесі және (немесе) операторсыз; біз оларды сіздің тапсырмаңыз бойынша өңдейміз. Сіз мұндай құжаттарды жүктеуге және оларды Қазақстаннан тыс жерде өңдеуге беруге (сервер Германияда, тану қызметі АҚШ-та) заңды негізіңіз бар екенін растайсыз.</li>
+<li>Мемлекеттік құпияларды қамтитын құжаттарды және шетелге берілуін заң тыйым салатын немесе шектейтін деректерді жүктемеңіз.</li>
+<li>Нәтижелер 90 күн сақталады, содан кейін жойылады. Қажетті файлдарды өзіңізде сақтаңыз: қызмет құжаттар мұрағаты емес.</li>
+</ul>
+
+<h2>10. Рұқсат етілген пайдалану</h2>
+<ul>
+<li>Заңсыз алынған немесе пайдаланылатын құжаттарды, жалған құжаттарды, сондай-ақ құжатқа жатпайтын файлдарды (мысалы, зиянды файлдарды) жүктеуге болмайды.</li>
+<li>Қызметтің шектеулерін айналып өтуге болмайды, мысалы, лимиттерден өту үшін бірнеше аккаунт ашу.</li>
+<li>Сайтқа автоматты түрде сұраулар жіберуге (скрипттер, боттар, деректерді жаппай жинау), шамадан тыс жүктеме түсіруге, осалдықтарды іздеуге және пайдалануға болмайды. Осалдықты байқасаңыз, «Байланыс» арқылы хабарлаңыз.</li>
+<li>Қызметке қолжетімділікті сатуға немесе үшінші тұлғаларға беруге, қызметті көшіруге, декомпиляциялауға немесе оның құрылысын өзге жолмен қалпына келтіруге болмайды. Бұл ретте сіз өз клиенттеріңіздің құжаттарын өңдеп, нәтижелерді оларға бере аласыз.</li>
+<li>Бір аккаунтты бір-бірімен байланысы жоқ бірнеше ұйым пайдаланбауы тиіс.</li>
+</ul>
+
+<h2>11. Компания кабинеті</h2>
+<ul>
+<li>Компания иесі қызметкерлерді сілтеме немесе аккаунт коды арқылы шақырады; қызметкер шақыруды өзі қабылдаған жағдайда ғана компанияға қосылады.</li>
+<li>Қызметкерлердің беттері компания иесінің балансынан жұмсалады. Иесі қызметкерлердің компаниядағы жүктеулерін көреді, жүктеп ала алады және жоя алады; қызметкер тек өз жүктеулерін көреді. Қызметкер шыққаннан немесе шығарылғаннан кейін оның компаниядағы жүктеулері иесінде қалады.</li>
+<li>Компания иесі қызметкерлердің бұл туралы білуіне және олардың компания атынан не жүктейтініне жауап береді.</li>
+</ul>
+
+<h2>12. Қолжетімділікті шектеу және тоқтату</h2>
+<ul>
+<li>Осы шарттар бұзылғанда, теріс пайдаланғанда немесе заң талап еткенде біз аккаунтты шектей немесе бұғаттай аламыз. Мүмкін болса, «Байланыс» арқылы сұрау бойынша себебін айтамыз.</li>
+<li>Сіз қызметті пайдалануды тоқтатып, аккаунтты кез келген уақытта «Аккаунт» бөлімінде жоя аласыз.</li>
+<li>Біз қызметтің жұмысын тоқтатуымыз мүмкін. Бұл жағдайда мүмкіндігінше алдын ала сайтта хабарлаймыз, ал әрекеттегі тарифтің төленген және пайдаланылмаған беттерін сізбен келісім бойынша немесе заңда белгіленген тәртіппен есепке аламыз.</li>
+</ul>
+
+<h2>13. Жауапкершілік</h2>
+<ul>
+<li>Қызмет «қалай бар, солай» және «қолжетімді болғанынша» ұсынылады. Біз оның үзіліссіз және қатесіз жұмыс істейтініне кепілдік бермейміз: жұмыстар, жеткізушілердің ақаулары және күндік шектеулер оны уақытша қолжетімсіз етуі мүмкін.</li>
+<li>Заң рұқсат ететін шекте біз жанама залалдар, қолдан шығарылған пайда, деректердің жоғалуы, айыппұлдар, өсімпұлдар, салықтарды қосымша есептеу және нәтижелердегі қателердің немесе оларды тексерусіз пайдаланудың өзге салдары үшін жауап бермейміз.</li>
+<li>Заң рұқсат ететін шекте барлық талаптар бойынша біздің жалпы жауапкершілігіміз талапқа негіз болған оқиғаға дейінгі 3 ай ішінде қызмет үшін төлеген сомаңызбен шектеледі. Тегін пайдалану (өз кілтімен пайдалану) үшін заң рұқсат ететін шекте жауапкершілік көтермейміз.</li>
+<li>Осы шарттардағы ештеңе заң бойынша алып тастауға немесе шектеуге болмайтын жауапкершілікті алып тастамайды және шектемейді.</li>
+<li>Жүктелетін құжаттардың заңдылығына және ондағы деректерді өңдеуге негіздің болуына сіз жауаптысыз. Егер сіздің осы шарттарды немесе заңды бұзуыңызға байланысты бізге талаптар қойылса, сіз бұдан туындаған залалдарды заңда көзделген шекте өтейсіз.</li>
+</ul>
+
+<h2>14. Қызмет пен шарттардың өзгеруі</h2>
+<ul>
+<li>Біз қызметтің функцияларын, тарифтерді және осы шарттарды өзгерте аламыз. Шарттардың жаңа редакциясы осы бетте жаңа күнімен жарияланады.</li>
+<li>Жаңа баға ол жарияланғаннан кейінгі өтінімдерге қолданылады; бұрын қосылған тариф өз мерзімі аяқталғанға дейін бұрынғы шарттармен әрекет етеді.</li>
+<li>Өзгерістен кейін қызметті пайдалануды жалғастырсаңыз, сіз жаңа редакцияны қабылдайсыз. Онымен келіспесеңіз, қызметті пайдалануды тоқтатып, аккаунтты жойыңыз.</li>
+</ul>
+
+<h2>15. Даулар және қолданылатын құқық</h2>
+<ul>
+<li>Осы шарттарға және қызметке байланысты қатынастарға Қазақстан Республикасының заңнамасы қолданылады.</li>
+<li>Алдымен дауды келіссөз арқылы шешуге тырысамыз: аккаунт кодын және талабыңыздың сипаттамасын көрсетіп, «Байланыс» беті арқылы жазбаша талап (претензия) жіберіңіз. Біз оны қарап, көрсеткен байланысыңыз бойынша жауап береміз.</li>
+<li>Егер дауды шешу мүмкін болмаса, ол Қазақстан Республикасының заңнамасында белгіленген тәртіппен сотта қаралады.</li>
+<li>Егер осы шарттардың қандай да бір ережесі жарамсыз болып шықса, қалғандары күшінде қалады.</li>
+<li>Шарттардың негізгі мәтіні — орыс тілінде; қазақ немесе ағылшын нұсқасымен алшақтық болса, орыс тіліндегі нұсқа қолданылады.</li>
+</ul>
+
+{% elif lang == 'en' %}
+<h1>Terms of use</h1>
+<p class="meta">Version of 24 October 2026</p>
+<p class="lead">In short: the service is for business, results must be checked, and our liability is limited. The details are below.</p>
+
+<h2>1. The service and who provides it</h2>
+<ul>
+<li>Skaner turns photos and PDFs of receipts, invoices, acts of completed work and waybills into data: Excel, 1C, CSV, JSON and PDF files.</li>
+<li>The service is provided by its owner ("we"); contact is through the Contacts page. Once the owner is registered as an individual entrepreneur, the owner's legal details will be shown on the Contacts page and in the invoice.</li>
+<li>These terms are an agreement between you and us on the use of the skaner.app website. By signing in and using the service you accept them. How we process data is described in the Privacy Policy, which is part of these terms.</li>
+</ul>
+
+<h2>2. Who the service is for</h2>
+<ul>
+<li>The service is mainly meant for business documents: receipts, invoices, acts and waybills. It can be used by accounting teams, companies, entrepreneurs and private individuals.</li>
+<li>If you use the service for personal needs, the rights that the law gives to consumers stay with you: nothing in these terms limits them. If you act on behalf of an organisation, you confirm that you are entitled to do so.</li>
+</ul>
+
+<h2>3. Account and sign-in</h2>
+<ul>
+<li>You sign in with a one-time code sent to your email. You are responsible for access to your mailbox and for actions in your account.</li>
+<li>One account is for one person or one organisation. Do not give access to outsiders, and do not share one account among unrelated companies: there is a company cabinet for teams.</li>
+<li>If you suspect that someone else has accessed your account, tell us through the Contacts page.</li>
+</ul>
+
+<h2>4. Free use with your own key</h2>
+<ul>
+<li>There is no free trial.</li>
+<li>You can use the service for free with your own Anthropic or Google (Gemini) API key: processing runs through your account with the provider. The costs at the provider and its terms are yours; we are not responsible for them.</li>
+<li>Without your own key, processing runs through our account and is paid by the plans.</li>
+<li>You are responsible for your key. Do not give us a key with extra permissions or without a spending limit: create a separate key with a limit. The quality of the result depends on the model you choose; check the result.</li>
+</ul>
+
+<h2>5. Pages and how they are counted</h2>
+<ul>
+<li>Recognition is paid in pages. 1 photo or 1 PDF page = 1 page. If one photo contains several documents, they are counted by the number of documents; a long receipt in several photos is counted by the number of photos.</li>
+<li>A very dense page (many lines) may count as several pages. The number of pages charged is shown in the upload result.</li>
+<li>Not charged: files refused before processing; pages for which the recognition service did not respond; processing interrupted by a restart of our server. If a page fails after its recognition has already been performed, such pages are free up to 3 times a day, and charged beyond that.</li>
+<li>Plan pages are used first, then extra pages.</li>
+<li>The website has a shared daily processing volume. When it is used up, new uploads can be made the next day.</li>
+</ul>
+
+<h2>6. Plans and payment</h2>
+<ul>
+<li>Plans and prices in tenge are shown on the Plans page in the cabinet. The price shown at the time of the request applies.</li>
+<li>There is no online payment yet. You leave a "I want to pay" request, we contact you at the contact you gave and send an invoice. The plan is switched on by hand after the payment arrives.</li>
+<li>A plan is valid for 30 days from the moment it is switched on. Unused plan pages expire at the end of the period and are not carried over. If a new plan is switched on before the current one ends, the remaining pages are added to the new plan and the period starts again.</li>
+<li>Pages beyond the plan are not charged automatically: we agree their number and payment with you and then add the pages by hand. Such extra pages have no expiry while the account exists.</li>
+<li>When an account is deleted, its remaining pages and plan are lost.</li>
+</ul>
+
+<h2>7. Refunds</h2>
+<ul>
+<li>Pages not processed because of a service failure are not charged (section 5).</li>
+<li>In other cases payment for plans and pages is not refunded, except where the law requires a refund or where we decide to refund it ourselves. To ask for a refund, write through the Contacts page and give your account code.</li>
+</ul>
+
+<h2>8. Results must be checked</h2>
+<ul>
+<li>Recognition is automatic and can be wrong or incomplete: wrong figures, missing lines, mixed-up details. We do not guarantee the accuracy or completeness of results, or that they fit any particular purpose.</li>
+<li>Check a result against the source document before you use it for accounting, reporting, tax, legal or payment purposes, especially the fields marked "Please check". The service's checks of sums and details help, but they do not replace your own check.</li>
+<li>Skaner does not provide accounting, tax or legal services or advice. Decisions based on the results are yours.</li>
+</ul>
+
+<h2>9. Your documents and data</h2>
+<ul>
+<li>The rights to your documents and results stay with you. You allow us to process them only to give you the result, as described in the Privacy Policy.</li>
+<li>For personal data in the documents you are the owner and/or operator; we process it on your instruction. You confirm that you have a lawful basis to upload such documents and to have them processed outside Kazakhstan (the server is in Germany, the recognition service in the USA).</li>
+<li>Do not upload documents containing state secrets, or data whose transfer abroad is prohibited or restricted by law.</li>
+<li>Results are kept for 90 days and are then deleted. Keep the files you need yourself: the service is not a document archive.</li>
+</ul>
+
+<h2>10. Acceptable use</h2>
+<ul>
+<li>Do not upload documents obtained or used unlawfully, forged documents, or files that are not documents (for example harmful files).</li>
+<li>Do not work around the service's limits, for example by opening several accounts to get past them.</li>
+<li>Do not send automated requests to the website (scripts, bots, bulk data collection), create excessive load, or look for and use vulnerabilities. If you notice a vulnerability, tell us through the Contacts page.</li>
+<li>Do not sell access to the service or give it to third parties, and do not copy, decompile or otherwise reconstruct how the service works. You may, however, process your own clients' documents and give them the results.</li>
+<li>One account must not be used by several unrelated organisations.</li>
+</ul>
+
+<h2>11. Company cabinet</h2>
+<ul>
+<li>A company owner invites members by a link or by an account code; a member joins the company only after accepting the invitation.</li>
+<li>Members' pages are taken from the company owner's balance. The owner sees members' uploads in the company and can download and delete them; a member sees only their own. After a member leaves or is removed, their uploads in the company stay with the owner.</li>
+<li>The company owner is responsible for making sure members know this, and for what they upload on behalf of the company.</li>
+</ul>
+
+<h2>12. Restriction and termination of access</h2>
+<ul>
+<li>If these terms are broken, in case of abuse, or where the law requires it, we may restrict or block an account. Where possible, we will tell you the reason on request through the Contacts page.</li>
+<li>You can stop using the service and delete your account at any time on the Account page ("Profile" in the menu).</li>
+<li>We may stop running the service. In that case we will announce it on the site in advance where possible, and paid unused pages of a current plan will be settled by agreement with you or as the law provides.</li>
+</ul>
+
+<h2>13. Liability</h2>
+<ul>
+<li>The service is provided "as is" and "as available". We do not guarantee that it will work without interruptions or errors: maintenance, failures of providers and daily limits can make it temporarily unavailable.</li>
+<li>To the extent permitted by law, we are not liable for indirect losses, lost profit, loss of data, fines, penalties, additional tax assessments or other consequences of errors in the results or of using them without checking.</li>
+<li>To the extent permitted by law, our total liability for all claims is limited to the amount you paid for the service in the 3 months before the event that gave rise to the claim. For free use (use with your own key) we bear no liability to the extent permitted by law.</li>
+<li>Nothing in these terms excludes or limits liability that cannot be excluded or limited by law.</li>
+<li>You are responsible for the lawfulness of the documents you upload and for having a basis to process the data in them. If claims are made against us because you broke these terms or the law, you compensate the resulting losses to the extent provided by law.</li>
+</ul>
+
+<h2>14. Changes to the service and the terms</h2>
+<ul>
+<li>We may change the service's features, the plans and these terms. A new version of the terms is published on this page with a new date.</li>
+<li>A new price applies to requests made after it is published; a plan already switched on keeps its conditions until the end of its period.</li>
+<li>If you keep using the service after a change, you accept the new version. If you do not agree with it, stop using the service and delete your account.</li>
+</ul>
+
+<h2>15. Disputes and governing law</h2>
+<ul>
+<li>These terms and relations connected with the service are governed by the law of the Republic of Kazakhstan.</li>
+<li>We first try to settle a dispute by negotiation: send a written claim through the Contacts page with your account code and a description of your demand. We will consider it and reply at the contact you give.</li>
+<li>If the dispute cannot be settled, it is heard by a court in the manner established by the law of the Republic of Kazakhstan.</li>
+<li>If any provision of these terms turns out to be invalid, the others remain in force.</li>
+<li>The main text of the terms is in Russian; if it differs from the Kazakh or English version, the Russian version applies.</li>
+</ul>
+
+{% else %}
+<h1>Условия использования</h1>
+<p class="meta">Редакция от 6 ноября 2026</p>
+<p class="lead">Коротко: сервис для бизнеса, результаты нужно проверять, наша ответственность ограничена. Подробнее — ниже.</p>
+
+<h2>1. Сервис и кто его предоставляет</h2>
+<ul>
+<li>Skaner превращает фото и PDF чеков, счетов, актов выполненных работ и накладных в данные: файлы Excel, 1С, CSV, JSON и PDF.</li>
+<li>Сервис предоставляет его владелец (далее — «мы»), связь — через страницу «Контакты». Когда владелец зарегистрируется как индивидуальный предприниматель, его реквизиты появятся на странице «Контакты» и в счёте.</li>
+<li>Эти условия — соглашение между вами и нами об использовании сайта skaner.app. Входя в аккаунт и пользуясь сервисом, вы их принимаете. Как мы обрабатываем данные, описано в Политике конфиденциальности, она — часть этих условий.</li>
+</ul>
+
+<h2>2. Для кого сервис</h2>
+<ul>
+<li>Сервис рассчитан в первую очередь на деловые документы: чеки, счета, акты, накладные. Им могут пользоваться бухгалтерии, компании, предприниматели и частные лица.</li>
+<li>Если вы пользуетесь сервисом для личных нужд, права, которые закон даёт потребителям, остаются за вами: ничто в этих условиях их не ограничивает. Если вы действуете от имени организации, вы подтверждаете, что вправе это делать.</li>
+</ul>
+
+<h2>3. Аккаунт и вход</h2>
+<ul>
+<li>Вход выполняется по одноразовому коду, который приходит на почту. Вы отвечаете за доступ к своей почте и за действия в своём аккаунте.</li>
+<li>Один аккаунт — для одного человека или одной организации. Не передавайте доступ посторонним и не пользуйтесь одним аккаунтом нескольким несвязанным компаниям: для команды есть кабинет компании.</li>
+<li>Если вы подозреваете, что в ваш аккаунт вошёл кто-то другой, сообщите нам через страницу «Контакты».</li>
+</ul>
+
+<h2>4. Бесплатно со своим ключом</h2>
+<ul>
+<li>Бесплатного пробного периода нет.</li>
+<li>Бесплатно можно пользоваться со своим ключом API Anthropic или Google (Gemini): обработка идёт через ваш аккаунт у провайдера. Расходы у провайдера и его условия — ваши, мы за них не отвечаем.</li>
+<li>Без своего ключа обработка идёт через наш аккаунт и оплачивается по тарифам.</li>
+<li>Вы отвечаете за свой ключ. Не передавайте нам ключ с лишними правами или без лимита расходов: создайте отдельный ключ с лимитом. Качество результата зависит от выбранной модели; результат нужно проверять.</li>
+</ul>
+
+<h2>5. Страницы и как они считаются</h2>
+<ul>
+<li>Распознавание оплачивается страницами. 1 фото или 1 страница PDF = 1 страница. Если на одном фото несколько документов, считается по числу документов; длинный чек из нескольких фото — по числу фото.</li>
+<li>Очень плотная страница (много строк) может засчитываться как несколько страниц. Сколько страниц списано, видно в результате загрузки.</li>
+<li>Не списываются: файлы, отклонённые до обработки; страницы, по которым сервис распознавания не ответил; обработка, прерванная перезапуском нашего сервера. Если страница завершилась ошибкой уже после распознавания, такие страницы бесплатны до 3 раз в сутки, сверх этого — списываются.</li>
+<li>Сначала тратятся страницы тарифа, затем дополнительные страницы.</li>
+<li>У сайта есть общий дневной объём обработки. Когда он исчерпан, новые загрузки можно сделать на следующий день.</li>
+</ul>
+
+<h2>6. Тарифы и оплата</h2>
+<ul>
+<li>Тарифы и цены в тенге указаны на странице «Тарифы» в кабинете. Действует цена, указанная на момент заявки.</li>
+<li>Онлайн-оплаты пока нет. Вы оставляете заявку «Хочу оплатить», мы связываемся с вами по указанному контакту и выставляем счёт. Тариф подключается вручную после поступления оплаты.</li>
+<li>Тариф действует 30 дней с момента подключения. Неиспользованные страницы тарифа в конце срока сгорают и не переносятся. Если новый тариф подключён до окончания текущего, оставшиеся страницы добавляются к новому тарифу, а срок отсчитывается заново.</li>
+<li>Страницы сверх тарифа автоматически не списываются: их количество и оплату мы согласуем с вами, затем добавляем страницы вручную. У таких дополнительных страниц нет срока, пока существует аккаунт.</li>
+<li>При удалении аккаунта оставшиеся страницы и тариф пропадают.</li>
+</ul>
+
+<h2>7. Возвраты</h2>
+<ul>
+<li>Страницы, не обработанные из-за сбоя сервиса, не списываются (раздел 5).</li>
+<li>В остальных случаях оплата за тарифы и страницы не возвращается, кроме случаев, когда возврат требует закон, или когда мы решим вернуть её сами. Чтобы попросить о возврате, напишите через страницу «Контакты» и укажите код аккаунта.</li>
+</ul>
+
+<h2>8. Результаты нужно проверять</h2>
+<ul>
+<li>Распознавание выполняется автоматически и может быть ошибочным или неполным: неверные цифры, пропущенные строки, перепутанные реквизиты. Мы не гарантируем точность и полноту результатов и их пригодность для какой-либо цели.</li>
+<li>Проверяйте результат по исходному документу до того, как использовать его в учёте, отчётности, для налоговых, юридических или платёжных целей. Особенно — поля, отмеченные «проверьте». Проверки сумм и реквизитов в сервисе помогают, но не заменяют вашу проверку.</li>
+<li>Skaner не оказывает бухгалтерских, налоговых и юридических услуг и не даёт консультаций. Решения на основе результатов принимаете вы.</li>
+</ul>
+
+<h2>9. Ваши документы и данные</h2>
+<ul>
+<li>Права на ваши документы и результаты остаются у вас. Вы разрешаете нам обрабатывать их только для того, чтобы выдать вам результат, как описано в Политике конфиденциальности.</li>
+<li>Для персональных данных в документах вы — собственник и (или) оператор; мы обрабатываем их по вашему поручению. Вы подтверждаете, что у вас есть законное основание загружать такие документы и передавать их на обработку за пределы Казахстана (сервер в Германии, сервис распознавания в США).</li>
+<li>Не загружайте документы, содержащие государственные секреты, и данные, передачу которых за рубеж закон запрещает или ограничивает.</li>
+<li>Результаты хранятся 90 дней, затем удаляются. Сохраняйте нужные файлы у себя: сервис не является архивом документов.</li>
+</ul>
+
+<h2>10. Допустимое использование</h2>
+<ul>
+<li>Нельзя загружать документы, полученные или используемые незаконно, поддельные документы, а также файлы, которые не являются документами (например, вредоносные).</li>
+<li>Нельзя обходить ограничения сервиса, например открывать несколько аккаунтов, чтобы обойти лимиты.</li>
+<li>Нельзя автоматически отправлять запросы к сайту (скрипты, боты, массовый сбор данных), создавать чрезмерную нагрузку, искать и использовать уязвимости. Если заметили уязвимость, сообщите нам через страницу «Контакты».</li>
+<li>Нельзя продавать доступ к сервису или передавать его третьим лицам, копировать, декомпилировать или иным способом восстанавливать устройство сервиса. При этом вы можете обрабатывать документы своих клиентов и передавать им результаты.</li>
+<li>Одним аккаунтом не должны пользоваться несколько несвязанных организаций.</li>
+</ul>
+
+<h2>11. Кабинет компании</h2>
+<ul>
+<li>Владелец компании приглашает сотрудников по ссылке или по коду аккаунта; сотрудник попадает в компанию, только если сам примет приглашение.</li>
+<li>Страницы сотрудников тратятся из баланса владельца компании. Владелец видит загрузки сотрудников в компании, может их скачать и удалить; сотрудник видит только свои. После выхода или исключения сотрудника его загрузки в компании остаются у владельца.</li>
+<li>Владелец компании отвечает за то, чтобы сотрудники об этом знали, и за то, что они загружают от имени компании.</li>
+</ul>
+
+<h2>12. Ограничение и прекращение доступа</h2>
+<ul>
+<li>При нарушении этих условий, при злоупотреблении или по требованию закона мы можем ограничить или заблокировать аккаунт. Если это возможно, мы сообщим причину по запросу через страницу «Контакты».</li>
+<li>Вы можете прекратить пользоваться сервисом и удалить аккаунт в любой момент в разделе «Аккаунт».</li>
+<li>Мы можем прекратить работу сервиса. В этом случае мы по возможности заранее сообщим об этом на сайте, а оплаченные и неиспользованные страницы действующего тарифа учтём по договорённости с вами или в порядке, установленном законом.</li>
+</ul>
+
+<h2>13. Ответственность</h2>
+<ul>
+<li>Сервис предоставляется «как есть» и «по мере доступности». Мы не гарантируем, что он будет работать без перерывов и ошибок: работы, сбои поставщиков и дневные ограничения могут делать его временно недоступным.</li>
+<li>В пределах, допускаемых законом, мы не отвечаем за косвенные убытки, упущенную выгоду, потерю данных, штрафы, пени, доначисления налогов и иные последствия ошибок в результатах или их использования без проверки.</li>
+<li>В пределах, допускаемых законом, наша общая ответственность по всем требованиям ограничена суммой, которую вы заплатили за сервис за 3 месяца до события, ставшего основанием требования. За бесплатное использование (использование со своим ключом) мы в пределах, допускаемых законом, ответственности не несём.</li>
+<li>Ничто в этих условиях не исключает и не ограничивает ответственность, которую по закону нельзя исключить или ограничить.</li>
+<li>Вы отвечаете за законность загружаемых документов и за наличие оснований обрабатывать данные в них. Если к нам предъявят требования из-за нарушения вами этих условий или закона, вы возмещаете вызванные этим убытки в пределах, предусмотренных законом.</li>
+</ul>
+
+<h2>14. Изменения сервиса и условий</h2>
+<ul>
+<li>Мы можем менять функции сервиса, тарифы и эти условия. Новая редакция условий публикуется на этой странице с новой датой.</li>
+<li>Новая цена действует для заявок после её публикации; уже подключённый тариф действует на прежних условиях до конца своего срока.</li>
+<li>Если вы продолжаете пользоваться сервисом после изменения, вы принимаете новую редакцию. Если вы с ней не согласны, прекратите пользоваться сервисом и удалите аккаунт.</li>
+</ul>
+
+<h2>15. Споры и применимое право</h2>
+<ul>
+<li>К этим условиям и отношениям, связанным с сервисом, применяется законодательство Республики Казахстан.</li>
+<li>Сначала мы стараемся решить спор переговорами: направьте письменную претензию через страницу «Контакты» с кодом аккаунта и описанием требования. Мы рассмотрим её и ответим по указанному вами контакту.</li>
+<li>Если спор не удалось решить, он рассматривается судом в порядке, установленном законодательством Республики Казахстан.</li>
+<li>Если какое-либо положение этих условий окажется недействительным, остальные продолжают действовать.</li>
+<li>Основной текст условий — на русском языке; при расхождении с казахской или английской версией действует русская.</li>
+</ul>
+{% endif %}
+</div></section>
+{% endblock %}

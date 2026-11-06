@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ t('title') }}{% endblock %}</title>
+<meta name="description" content="{{ t('meta_desc') }}">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/fonts.css">
+<link rel="stylesheet" href="/static/app.css">
+<link rel="stylesheet" href="/static/anim.css">
+<link rel="stylesheet" href="/static/demo.css">
+{% block head %}{% endblock %}
+</head>
+<body>
+<div class="bar0">{{ t('bar0') }}</div>
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="/" aria-label="Skaner">skaner</a>
+    <nav class="nav" aria-label="main">
+      <a href="/#feat">{{ t('nav_feat') }}</a>
+      <a href="/#how">{{ t('nav_how') }}</a>
+      <a href="/#prices">{{ t('nav_prices') }}</a>
+    </nav>
+    <div class="nav-r">
+      <details class="langmenu">
+        <summary aria-label="{{ t('lang_label') }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9S14.5 18.3 12 21c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg>
+          {{ lang|upper }}
+        </summary>
+        <form class="menu" method="post" action="/lang">
+          <input type="hidden" name="next" value="{{ lang_next|default(request.url.path) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          {% for code, name in lang_names %}<button name="lang" value="{{ code }}"{% if code == lang %} aria-current="true"{% endif %}>{{ name }}</button>{% endfor %}
+        </form>
+      </details>
+      {% if user %}
+      <a class="btn ghost cab" href="/app">{{ t('nav_cab') }}</a>
+      {% else %}
+      <a class="btn ghost" href="/login">{{ t('login') }}</a>
+      <a class="btn" href="/login">{{ t('try') }}</a>
+      {% endif %}
+    </div>
+  </div>
+</header>
+<main>{% block main %}{% endblock %}</main>
+<footer class="foot">
+  <div class="wrap fgrid">
+    <div><a class="brand" href="/">skaner</a><p>{{ t('foot_tag') }}</p></div>
+    <div><b>{{ t('foot_product') }}</b><a href="/#feat">{{ t('nav_feat') }}</a><a href="/#prices">{{ t('nav_prices') }}</a><a href="/bot">{{ t('foot_bot') }}</a></div>
+    <div><b>{{ t('foot_company') }}</b><a href="/security">{{ t('foot_security') }}</a><a href="/contacts">{{ t('foot_contacts') }}</a></div>
+    <div><b>{{ t('foot_legal') }}</b><a href="/privacy">{{ t('foot_privacy') }}</a><a href="/terms">{{ t('foot_terms') }}</a></div>
+  </div>
+</footer>
+<script src="/static/app.js" defer></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

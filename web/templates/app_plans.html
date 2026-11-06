@@ -1,0 +1,24 @@
+{% extends "app_shell.html" %}
+{% block title %}{{ t('pl_title') }}{% endblock %}
+{% block app %}
+<h1 class="h1s">{{ t('pl_h') }}</h1>
+<div class="note plnow">
+  <b>{{ t('pl_now') }}</b>
+  {% for line in lines %}<p>{{ line }}</p>{% endfor %}
+</div>
+<div class="plans plcards">
+  {% for c in cards %}
+  <div class="card{% if c.key == 'biz' %} feat{% endif %}">
+    <h3>{{ c.name }}</h3>
+    <p class="price">{{ c.price }}<small> {{ t('mo') }}</small></p>
+    <p>{{ c.pages }}</p>
+    <p class="muted">{{ c.over }}</p>
+    <a class="btn{% if c.key != 'biz' %} ghost{% endif %}" href="/app/plans/request?plan={{ c.key }}">{{ t('pl_pay') }}</a>
+  </div>
+  {% endfor %}
+</div>
+<p class="muted">{{ t('pl_more') }}</p>
+<p class="fine">{{ t('pl_how') }}</p>
+{% if pay_email %}<p class="fine">{{ t('pl_mail') }} <a href="mailto:{{ pay_email }}">{{ pay_email }}</a></p>{% endif %}
+<p class="fine">{{ t('pl_over') }}</p>
+{% endblock %}

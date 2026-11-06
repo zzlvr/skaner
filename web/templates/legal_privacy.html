@@ -1,0 +1,286 @@
+{% extends "base.html" %}
+{% block title %}{% if lang == 'kk' %}Құпиялылық — Skaner{% elif lang == 'en' %}Privacy — Skaner{% else %}Конфиденциальность — Skaner{% endif %}{% endblock %}
+{% block head %}<link rel="stylesheet" href="/static/legal.css">{% endblock %}
+{% block main %}
+<section><div class="wrap prose">
+{% if lang == 'kk' %}
+<h1>Құпиялылық саясаты</h1>
+<p class="meta">Редакция: 2026 жылғы 6 қараша</p>
+<p class="lead">skaner.app сайты қандай деректерді, не үшін, қай жерде және қанша уақыт өңдейтіні туралы. Мұнда тек қызмет шын мәнінде істейтін нәрсе сипатталған. Негізгі мәтін — орыс тіліндегі нұсқа.</p>
+
+<h2>Деректерді кім өңдейді</h2>
+<ul>
+<li>Skaner қызметін оның иесі ұсынады (бұдан әрі — «біз»). Бізбен «Байланыс» беті арқылы хабарласуға болады. Иесі жеке кәсіпкер ретінде тіркелгеннен кейін оның деректемелері «Байланыс» бетінде және шотта көрсетіледі.</li>
+<li>Саясат skaner.app сайтына қатысты. Skaner Telegram-ботының өз сипаттамасы бар (/privacy командасы); сайт үшін бот арқылы телефонды растау осы жерде сипатталған.</li>
+<li>Қызмет ең алдымен іскерлік құжаттарға арналған; оны жеке тұлғалар да пайдалана алады.</li>
+</ul>
+
+<h2>Екі рөл: құжаттарыңыз және аккаунтыңыз</h2>
+<ul>
+<li><b>Құжаттардың мазмұны.</b> Қандай құжаттарды және не үшін жүктеуді сіз шешесіз. Құжаттардағы дербес деректер үшін сіз «Дербес деректер және оларды қорғау туралы» Қазақстан Республикасы Заңының мағынасында меншік иесі және (немесе) операторсыз. Біз оларды тек сіздің тапсырмаңыз бойынша және тек нәтиже беру үшін өңдейміз.</li>
+<li><b>Аккаунт деректері және техникалық деректер.</b> Оларды кіру, бет балансы, теріс пайдаланудан қорғау және сізбен байланыс жұмыс істеуі үшін өзіміз өңдейміз. Олар төменде көрсетілген. Бұл деректер Шарттарды орындау, қызметті теріс пайдаланудан қорғау және заң талаптарын орындау үшін қажет.</li>
+<li>Аккаунтқа кіріп, қызметті пайдалана отырып, сіз осы саясатта сипатталған өңдеуге, соның ішінде деректерді шетелге беруге келісім бересіз.</li>
+</ul>
+
+<h2>Құжаттарыңыз және нәтижелер</h2>
+<ul>
+<li>Жүктелген файлдар сервердің жадында өңделеді және дискіде де, дерекқорда да сақталмайды.</li>
+<li>Тану үшін файл шифрланған байланыс арқылы API арқылы тану қызметін ұсынатын Anthropic компаниясына (АҚШ) беріледі. Осы редакция күнінде қолданыстағы оның коммерциялық шарттары бойынша API арқылы берілген деректер модельдерді оқытуға пайдаланылмайды, ал кіріс деректер мен жауаптар әдетте онда 30 күн ішінде жойылады. Егер оның автоматты қауіпсіздік жүйелері оның пайдалану ережелерінің ықтимал бұзылуын белгілесе (оның ережелері бойынша — 2 жылға дейін) немесе заң талап етсе, олар ұзағырақ сақталуы мүмкін.</li>
+<li>Егер құжаттарды өз Anthropic немесе Google (Gemini) кілтіңізбен жүктесеңіз: кілт сұраныспен бірге шифрланған байланыс арқылы беріледі, өңдеу кезінде ғана сервер жадында тұрады, дерекқорға және журналдарға жазылмайды және беттерде көрсетілмейді. Құжаттар провайдеріңізге онымен жасаған келісіміңіз бен оның шарттары бойынша беріледі, біздің аккаунт арқылы емес. Белгі қойсаңыз, кілтті осы браузерде есте сақтауға болады: ол тек сіздің құрылғыңызда сақталады. Шығыс лимиті бар жеке кілт жасауды ұсынамыз.</li>
+<li>Нәтижелер (кестелер, мәтін) дерекқорда шифрланған түрде (AES-256-GCM) 90 күн сақталады, содан кейін жойылады. Оларды кез келген уақытта ертерек өзіңіз жоя аласыз.</li>
+<li>Біз құжаттар мен нәтижелерді сатпаймыз, жарнамаға пайдаланбаймыз, оларда модельдерді оқытпаймыз және «Өңдеуге тағы кім қатысады» бөліміндегі орындаушылардан басқа ешкімге бермейміз.</li>
+<li>Біз құжаттарыңыз бен нәтижелеріңізді қарамаймыз. Ерекшелік — нақты жүктеу бойынша көмек сұрап, файлды немесе нәтижені бізге өзіңіз жіберген кезде немесе заң талап еткенде.</li>
+<li>Егер сіз Skaner-дегі компания құрамында болсаңыз, оның иесі компаниядағы жүктеулеріңізді көреді, жүктеп ала алады және жоя алады. Басқа қызметкерлер оларды көрмейді. Компаниядан шыққаннан кейін бұл жүктеулер компания иесінде қалады.</li>
+</ul>
+
+<h2>Құжаттардағы үшінші тұлғалардың дербес деректері</h2>
+<ul>
+<li>Құжаттарда басқа адамдардың дербес деректері жиі болады: аты-жөні, ЖСН, лауазымы, қолы, банк деректемелері. Олар нәтижелерге де түседі.</li>
+<li>Құжатты жүктей отырып, сіз осы деректерді өңдеуге және оларды осы саясатта сипатталғандай Қазақстаннан тыс жерде өңдеуге беруге заңды негізіңіз (келісім немесе заң бойынша өзге негіз) бар екенін растайсыз.</li>
+<li>Мемлекеттік құпияларды қамтитын құжаттарды, сондай-ақ шетелге берілуін заң тыйым салатын немесе шектейтін деректерді жүктемеңіз.</li>
+<li>Егер сіздің деректеріңіз басқа біреу жүктеген құжатта болса, оны жүктеген адамға хабарласыңыз: олармен не істеуді сол шешеді. Нәтижелер бізде 90 күннен артық сақталмайды (резервтік көшірмелерден басқа, төменде қараңыз).</li>
+</ul>
+
+<h2>Аккаунт деректері және техникалық деректер</h2>
+<ul>
+<li><b>Эл. пошта.</b> Мекенжай кіру кодын жіберу үшін қажет: ол сервер жадында тек сұрау кезінде болады және Resend пошта қызметіне беріледі. Дерекқорда тек мекенжайдың таңбасы (құпия кілтпен жасалған HMAC) сақталады, аккаунтыңызды соның арқылы табамыз. Мекенжайдың өзін сақтамаймыз.</li>
+<li><b>Аккаунт.</b> Аккаунт коды (SK-…), тіл, кіру күндері, бет балансы, тариф, есептен шығару және толықтыру жазбалары, компания атауы және оның мүшелерінің құрамы (аккаунт кодтары бойынша), шақырулар.</li>
+<li><b>Төлем өтінімдері және «Байланыс» арқылы немесе нәтиже бетінен хабарламалар.</b> Сіз көрсеткен байланыс (телефон, WhatsApp немесе Telegram), компания атауы, мәтін. Дерекқорда олар шифрланған түрде сақталады; иесі жауап бере алуы үшін көшірмесі кәдімгі мәтінмен оның Telegram-ына келеді.</li>
+<li><b>Техникалық деректер.</b> IP-мекенжай мен браузердің таңбалары (кіру, сеанстар және әрекеттер санын шектеу үшін), сұраулар уақыты. Сервердің сұраулар журналы IP-мекенжайды, уақытты, параметрсіз бет мекенжайын және жауап кодын жазады. Журналдарға құжаттардың мазмұны, пошта мекенжайлары, телефон нөмірлері және кіру кодтары түспейді.</li>
+</ul>
+
+<h2>Өңдеуге тағы кім қатысады</h2>
+<ul>
+<li><b>Anthropic, PBC (АҚШ)</b> — құжаттарды тану (файлдар және нәтижелер).</li>
+<li><b>Oracle Cloud</b> — сайт пен дерекқор жұмыс істейтін сервер, Германияда (Франкфурт).</li>
+<li><b>Cloudflare</b> — сайтқа барлық сұраулар, соның ішінде жүктелетін файлдар өтетін желі: шабуылдардан қорғау, шифрланған байланыс және кіру бетіндегі «сіз робот емессіз» тексеруі (Cloudflare Turnstile). Байланыс браузер мен Cloudflare арасында және Cloudflare мен біздің сервер арасында шифрланады. Cloudflare IP-мекенжайды және браузердің техникалық деректерін көреді.</li>
+<li><b>Resend</b> — кіру коды бар хаттарды жіберу (пошта мекенжайы және код).</li>
+<li><b>Telegram</b> — телефонды растауға арналған бот; иесіне өтінімдер мен хабарламалар туралы хабарлау; иесіне келетін дерекқордың шифрланған күнделікті көшірмелері.</li>
+<li>Олардың әрқайсысы деректерді өз шарттары бойынша өңдейді. Біз оларға тек өз жұмысының бөлігіне қажетті нәрсені береміз.</li>
+</ul>
+
+<h2>Деректерді Қазақстаннан тыс жерге беру</h2>
+<ul>
+<li>Біздің сервер Германияда, тану қызметі АҚШ-та орналасқан. Cloudflare, Resend және Telegram да Қазақстаннан тыс жерде жұмыс істейді. Сондықтан деректер, соның ішінде құжаттардың мазмұны, шетелге беріледі және сонда өңделеді.</li>
+<li>Құжаттарды жүктей отырып, сіз бізге осындай беруді тапсырасыз. Құжаттарыңыздағы үшінші тұлғалардың деректерін шетелге беруге негізіңіздің болуына сіз жауаптысыз.</li>
+<li>Егер ішкі ережелеріңіз немесе заң бойынша құжаттарды шетелге беруге болмаса, оларды Skaner-ге жүктемеңіз.</li>
+</ul>
+
+<h2>Деректерді қанша уақыт сақтаймыз</h2>
+<ul>
+<li>Жүктелген файлдар — сақтамаймыз (өңдеу кезінде тек жадта); тану қызметінде — оның шарттары бойынша, әдетте 30 күнге дейін (ерекшеліктері жоғарыда).</li>
+<li>Нәтижелер — 90 күн немесе сіз жойғанға дейін.</li>
+<li>Аккаунт — сіз оны жойғанға дейін.</li>
+<li>Кіру сеансы — сайтқа кірмесеңіз 30 күнге дейін, бірақ 90 күннен артық емес; кіру кодтары мен шектеу есептегіштері — шамамен бір тәулік.</li>
+<li>Өтінімдер мен хабарламалар — өңделгеннен кейін 90 күн, өңделмегендері — 365 күнге дейін; олардың иесінің Telegram-ындағы көшірмелері — 90 күнге дейін.</li>
+<li>Сервер журналдары — шектеулі уақыт, содан кейін автоматты түрде жойылады.</li>
+<li>Дерекқордың резервтік көшірмелері күн сайын жасалады: серверде соңғы 14-і сақталады, иесінің Telegram-ындағы шифрланған көшірмелер автоматты түрде жойылады. Сондықтан жойылған деректер резервтік көшірмелерде жойылғаннан кейін 90 күнге дейін қалуы мүмкін. Көшірмелер тек ақаудан кейін қалпына келтіру үшін пайдаланылады.</li>
+<li>Аккаунт жойылғаннан кейін мыналар қалады: бет есептен шығару және толықтыру жазбалары және иесі әрекеттерінің журналы (мысалы, аккаунт кодымен «тариф қосылды») — есеп, салық және төлем туралы даулар үшін қажет болғанша; оларда пошта, телефон және құжаттардың мазмұны жоқ. Сондай-ақ «сынақ мерзімі пайдаланылды» белгісі бар пошта таңбасы және сынақ беттерін алған телефонның таңбасы — сынақ мерзімін қайта алуға болмауы үшін мерзімсіз.</li>
+</ul>
+
+<h2>Cookie</h2>
+<p>Тек техникалық cookie: sk_session (кіру, 30 күнге дейін), sk_login (кіру қадамы, 15 минут), sk_csrf (формаларды қорғау, бір жылға дейін), lang (тіл, бір жылға дейін). Жарнамалық және аналитикалық cookie мен есептегіштер жоқ. Cloudflare сайтты қорғау үшін өзінің техникалық cookie-лерін қоюы мүмкін.</p>
+
+<h2>Құқықтарыңыз және жою</h2>
+<ul>
+<li>Сіз туралы қандай деректер бар екенін біле аласыз, оларды түзете аласыз, келісіміңізді кері қайтарып ала аласыз және жоюды талап ете аласыз.</li>
+<li>Деректердің көбі кабинетте көрінеді: тарих, нәтижелер, баланс, аккаунт коды. Нәтижелерді жүктеу бетінде жоюға болады. «Аккаунт» бөлімінде аккаунтты барлық деректерімен бірден жоюға болады. Қызметкерлері бар компанияның иесі алдымен оларды шығарады немесе компанияны жояды.</li>
+<li>Басқа сұрауларды «Байланыс» беті арқылы жіберіңіз және аккаунт кодын көрсетіңіз. Біз поштаны сақтамайтындықтан, сұрауды ол жіберілген аккаунт бойынша тексереміз. Заңда белгіленген мерзімде жауап береміз.</li>
+<li>Аккаунт деректерін өңдеуге келісімді кері қайтарып алу аккаунтты жоюды білдіреді: бұл деректерсіз қызмет жұмыс істей алмайды.</li>
+<li>Сіз Қазақстан Республикасының дербес деректерді қорғау жөніндегі уәкілетті органына немесе сотқа шағыммен жүгіне аласыз.</li>
+</ul>
+
+<h2>Деректерді қорғау</h2>
+<p>Қорғау шаралары «Қауіпсіздік» бетінде сипатталған. Бірде-бір шара тәуекелді толық жоймайды. Деректеріңізге қатысты ағып кету анықталса, біз бұл туралы сайтта немесе кабинетте хабарлаймыз және заң талап ететін әрекеттерді жасаймыз.</p>
+
+<h2>Саясаттың өзгеруі</h2>
+<p>Саясат өзгерсе, мұнда жаңа редакция күні көрсетіледі. Жаңа редакциямен келіспесеңіз, қызметті пайдалануды тоқтатып, аккаунтты жоя аласыз.</p>
+
+{% elif lang == 'en' %}
+<h1>Privacy Policy</h1>
+<p class="meta">Version of 24 October 2026</p>
+<p class="lead">What data the skaner.app website processes, why, where and for how long. Only what the service actually does is described here. The Russian version is the main text.</p>
+
+<h2>Who processes the data</h2>
+<ul>
+<li>The Skaner service is provided by its owner ("we"). You can reach us through the Contacts page. Once the owner is registered as an individual entrepreneur, the owner's legal details will be shown on the Contacts page and in the invoice.</li>
+<li>This policy covers the skaner.app website. The Skaner Telegram bot has its own description (the /privacy command); confirming your phone for the website through the bot is described here.</li>
+<li>The service is mainly meant for business documents; private individuals may use it too.</li>
+</ul>
+
+<h2>Two roles: your documents and your account</h2>
+<ul>
+<li><b>Contents of documents.</b> You decide which documents to upload and why. For personal data in the documents you are the owner and/or operator within the meaning of the Law of the Republic of Kazakhstan "On Personal Data and Their Protection". We process that data only on your instruction and only to produce the result.</li>
+<li><b>Account data and technical data.</b> We process these ourselves so that sign-in, the page balance, protection against abuse and contact with you work. They are listed below. This data is needed to perform the Terms, to protect the service from abuse and to meet legal requirements.</li>
+<li>By signing in and using the service you consent to the processing described in this policy, including the transfer of data abroad.</li>
+</ul>
+
+<h2>Your documents and results</h2>
+<ul>
+<li>Uploaded files are processed in the server's memory and are not saved to disk or to the database.</li>
+<li>For recognition, the file is sent over an encrypted connection to Anthropic (USA), which provides the recognition service through its API. Under its commercial terms in force at the date of this version, data sent through the API is not used to train models, and inputs and outputs are as a rule deleted on its side within 30 days. They may be kept longer if its automated safety systems flag a possible breach of its usage rules (under its rules, for up to 2 years), or if the law requires it.</li>
+<li>If you upload documents with your own Anthropic or Google (Gemini) key: the key is sent with the request over an encrypted connection, is held in the server's memory only while the documents are processed, is not written to the database or logs and is not shown on pages. Your documents then go to your provider under your agreement with it and its terms, not through our account. You can let this browser remember the key by ticking the box: it is kept on your device only. We recommend a separate key with a spending limit.</li>
+<li>Results (tables, text) are stored in the database encrypted (AES-256-GCM) for 90 days and are then deleted. You can delete them earlier at any time.</li>
+<li>We do not sell documents or results, do not use them for advertising, do not train models on them and do not pass them to anyone except the service providers listed under "Who else takes part in processing".</li>
+<li>We do not look at your documents or results. The exception is when you ask for help with a specific upload and send us the file or result yourself, or when the law requires it.</li>
+<li>If you are a member of a company in Skaner, its owner sees your uploads in the company and can download and delete them. Other members do not see them. After you leave the company, these uploads stay with its owner.</li>
+</ul>
+
+<h2>Personal data of third parties in documents</h2>
+<ul>
+<li>Documents often contain personal data of other people: names, individual identification numbers (IIN), job titles, signatures, bank details. This data also ends up in the results.</li>
+<li>By uploading a document you confirm that you have a lawful basis (consent or another basis under the law) to process this data and to have it processed outside Kazakhstan as described in this policy.</li>
+<li>Do not upload documents containing state secrets, or data whose transfer abroad is prohibited or restricted by law.</li>
+<li>If your data is in a document that someone else uploaded, contact the person who uploaded it: they decide what happens to it. Results are kept by us for no more than 90 days (apart from backups, see below).</li>
+</ul>
+
+<h2>Account data and technical data</h2>
+<ul>
+<li><b>Email.</b> The address is needed to send you a sign-in code: it is in the server's memory only during the request and is passed to the mail service Resend. The database keeps only a fingerprint of the address (an HMAC with a secret key), which we use to find your account. We do not store the address itself.</li>
+<li><b>Account.</b> Account code (SK-…), language, sign-in dates, page balance, plan, records of charges and top-ups, company name and its members (by account codes), invitations.</li>
+<li><b>Payment requests and messages sent through Contacts or from a result page.</b> The contact you give (phone, WhatsApp or Telegram), the company name, the text. In the database they are stored encrypted; a plain-text copy goes to the owner's Telegram so that the owner can reply.</li>
+<li><b>Technical data.</b> Fingerprints of the IP address and browser (for sign-in, sessions and limits on attempts), request times. The server's request log records the IP address, the time, the page address without parameters and the response code. Logs never contain document contents, email addresses, phone numbers or sign-in codes.</li>
+</ul>
+
+<h2>Who else takes part in processing</h2>
+<ul>
+<li><b>Anthropic, PBC (USA)</b>: document recognition (files and results).</li>
+<li><b>Oracle Cloud</b>: the server that runs the website and the database, in Germany (Frankfurt).</li>
+<li><b>Cloudflare</b>: the network that carries every request to the website, uploaded files included: protection against attacks, the encrypted connection and the "you are not a robot" check on the sign-in page (Cloudflare Turnstile). The connection is encrypted between your browser and Cloudflare and between Cloudflare and our server. Cloudflare sees the IP address and technical browser data.</li>
+<li><b>Resend</b>: sending sign-in code emails (email address and code).</li>
+<li><b>Telegram</b>: the bot for phone confirmation; notices to the owner about requests and messages; encrypted daily database copies delivered to the owner.</li>
+<li>Each of them processes data under its own terms. We give them only what their part of the work needs.</li>
+</ul>
+
+<h2>Transfer of data outside Kazakhstan</h2>
+<ul>
+<li>Our server is in Germany and the recognition service is in the USA. Cloudflare, Resend and Telegram also operate outside Kazakhstan. Data, including the contents of documents, is therefore transferred and processed abroad.</li>
+<li>By uploading documents you instruct us to make this transfer. You are responsible for having a basis to transfer abroad the third-party data in your documents.</li>
+<li>If your internal rules or the law do not allow documents to be transferred abroad, do not upload them to Skaner.</li>
+</ul>
+
+<h2>How long we keep data</h2>
+<ul>
+<li>Uploaded files: not kept (only in memory during processing); at the recognition service, under its terms, as a rule up to 30 days (exceptions above).</li>
+<li>Results: 90 days, or until you delete them.</li>
+<li>Account: until you delete it.</li>
+<li>Sign-in session: up to 30 days without visiting the site, and never more than 90 days; sign-in codes and limit counters: about one day.</li>
+<li>Requests and messages: 90 days after they are handled, up to 365 days if never handled; their copies in the owner's Telegram: up to 90 days.</li>
+<li>Server logs: a limited time, then deleted automatically.</li>
+<li>Database backups are made daily: the server keeps the latest 14, and the encrypted copies in the owner's Telegram are deleted automatically. Deleted data may therefore remain in backups for up to 90 days after deletion. Backups are used only to restore the service after a failure.</li>
+<li>After an account is deleted, the following remain: records of page charges and top-ups and the log of the owner's actions (for example "plan switched on" with the account code), for as long as they are needed for accounting, tax and payment disputes; they contain no email, phone or document contents. Also the email fingerprint marked "trial used" and the fingerprint of a phone that received trial pages, without a time limit, so that the trial cannot be taken again.</li>
+</ul>
+
+<h2>Cookies</h2>
+<p>Technical cookies only: sk_session (sign-in, up to 30 days), sk_login (sign-in step, 15 minutes), sk_csrf (form protection, up to one year), lang (language, up to one year). There are no advertising or analytics cookies or counters. Cloudflare may set its own technical cookies to protect the site.</p>
+
+<h2>Your rights and deletion</h2>
+<ul>
+<li>You can find out what data we have about you, correct it, withdraw your consent and ask for deletion.</li>
+<li>Most data is visible in the cabinet: history, results, balance, account code. Results can be deleted on the upload page. On the Account page ("Profile" in the menu) you can delete the account with all its data, immediately. The owner of a company with members first removes them or deletes the company.</li>
+<li>Send other requests through the Contacts page and give your account code. As we do not store your email, we verify a request by the account it is sent from. We reply within the time limits set by law.</li>
+<li>Withdrawing consent to the processing of account data means deleting the account: the service cannot work without that data.</li>
+<li>You may complain to the authorised body for personal data protection of the Republic of Kazakhstan or to a court.</li>
+</ul>
+
+<h2>Protection of data</h2>
+<p>Protective measures are described on the Security page. No measure removes the risk completely. If we find a leak affecting your data, we will announce it on the site or in the cabinet and take the steps the law requires.</p>
+
+<h2>Changes to this policy</h2>
+<p>When this policy changes, the date of the new version is shown here. If you do not agree with a new version, you can stop using the service and delete your account.</p>
+
+{% else %}
+<h1>Политика конфиденциальности</h1>
+<p class="meta">Редакция от 6 ноября 2026</p>
+<p class="lead">Какие данные обрабатывает сайт skaner.app, зачем, где и сколько хранит. Здесь описано только то, что сервис действительно делает. Основной текст — русская версия.</p>
+
+<h2>Кто обрабатывает данные</h2>
+<ul>
+<li>Сервис Skaner предоставляет его владелец (далее — «мы»). Связаться с нами можно через страницу «Контакты». Когда владелец зарегистрируется как индивидуальный предприниматель, его реквизиты появятся на странице «Контакты» и в счёте.</li>
+<li>Политика относится к сайту skaner.app. У Telegram-бота Skaner есть собственное описание (команда /privacy); подтверждение телефона для сайта через бота описано здесь.</li>
+<li>Сервис рассчитан в первую очередь на деловые документы; им могут пользоваться и частные лица.</li>
+</ul>
+
+<h2>Две роли: ваши документы и ваш аккаунт</h2>
+<ul>
+<li><b>Содержимое документов.</b> Какие документы загружать и зачем, решаете вы. Для персональных данных в документах вы — собственник и (или) оператор в смысле Закона Республики Казахстан «О персональных данных и их защите». Мы обрабатываем их только по вашему поручению и только чтобы выдать результат.</li>
+<li><b>Данные аккаунта и технические данные.</b> Их мы обрабатываем сами, чтобы работали вход, баланс страниц, защита от злоупотреблений и связь с вами. Они перечислены ниже. Эти данные нужны, чтобы исполнять Условия, защищать сервис от злоупотреблений и выполнять требования закона.</li>
+<li>Входя в аккаунт и пользуясь сервисом, вы даёте согласие на обработку, описанную в этой политике, включая передачу данных за рубеж.</li>
+</ul>
+
+<h2>Ваши документы и результаты</h2>
+<ul>
+<li>Загруженные файлы обрабатываются в памяти сервера и не сохраняются ни на диске, ни в базе данных.</li>
+<li>Для распознавания файл передаётся по зашифрованному соединению компании Anthropic (США), которая предоставляет сервис распознавания по API. По её коммерческим условиям, действующим на дату этой редакции, данные, переданные через API, не используются для обучения моделей, а входные данные и ответы по общему правилу удаляются у неё в течение 30 дней. Дольше они могут храниться, если её автоматические системы безопасности отметят возможное нарушение её правил использования (по её правилам — до 2 лет), или если этого требует закон.</li>
+<li>Если вы загружаете документы со своим ключом Anthropic или Google (Gemini): ключ передаётся вместе с запросом по зашифрованному соединению, хранится в памяти сервера только во время обработки, не записывается в базу и журналы и не показывается на страницах. Документы при этом уходят вашему провайдеру по вашему договору с ним и его условиям, а не через наш аккаунт. Ключ можно запомнить в этом браузере, если вы поставите галочку: он хранится только на вашем устройстве. Рекомендуем отдельный ключ с лимитом расходов.</li>
+<li>Результаты (таблицы, текст) хранятся в базе в зашифрованном виде (AES-256-GCM) 90 дней, затем удаляются. Вы можете удалить их раньше в любой момент.</li>
+<li>Мы не продаём документы и результаты, не используем их для рекламы, не обучаем на них модели и не передаём никому, кроме исполнителей из раздела «Кто ещё участвует в обработке».</li>
+<li>Мы не просматриваем ваши документы и результаты. Исключение — когда вы сами просите помочь с конкретной загрузкой и присылаете нам файл или результат, или когда этого требует закон.</li>
+<li>Если вы состоите в компании в Skaner, её владелец видит ваши загрузки в компании и может их скачать и удалить. Другие сотрудники их не видят. После выхода из компании эти загрузки остаются у её владельца.</li>
+</ul>
+
+<h2>Персональные данные третьих лиц в документах</h2>
+<ul>
+<li>В документах часто бывают персональные данные других людей: ФИО, ИИН, должности, подписи, банковские реквизиты. Они попадают и в результаты.</li>
+<li>Загружая документ, вы подтверждаете, что у вас есть законное основание (согласие или иное основание по закону) обрабатывать эти данные и передавать их для обработки за пределы Казахстана, как описано в этой политике.</li>
+<li>Не загружайте документы, содержащие государственные секреты, а также данные, передачу которых за рубеж закон запрещает или ограничивает.</li>
+<li>Если ваши данные оказались в документе, который загрузил кто-то другой, обратитесь к тому, кто его загрузил: он решает, что с ними делать. Результаты у нас хранятся не дольше 90 дней (кроме резервных копий, см. ниже).</li>
+</ul>
+
+<h2>Данные аккаунта и технические данные</h2>
+<ul>
+<li><b>Электронная почта.</b> Адрес нужен, чтобы отправить код входа: он находится в памяти сервера только во время запроса и передаётся почтовому сервису Resend. В базе хранится только отпечаток адреса (HMAC с секретным ключом), по которому мы находим ваш аккаунт. Сам адрес мы не храним.</li>
+<li><b>Аккаунт.</b> Код аккаунта (SK-…), язык, даты входа, баланс страниц, тариф, записи о списаниях и пополнениях, название компании и состав её участников (по кодам аккаунтов), приглашения.</li>
+<li><b>Заявки на оплату и сообщения через «Контакты» и со страницы результата.</b> Указанный вами контакт (телефон, WhatsApp или Telegram), название компании, текст. В базе они хранятся в зашифрованном виде; копия обычным текстом приходит владельцу в Telegram, чтобы он мог ответить.</li>
+<li><b>Технические данные.</b> Отпечатки IP-адреса и браузера (для входа, сеансов и ограничения числа попыток), время запросов. Журнал запросов сервера записывает IP-адрес, время, адрес страницы без параметров и код ответа. В журналы не попадают содержимое документов, адреса почты, номера телефонов и коды входа.</li>
+</ul>
+
+<h2>Кто ещё участвует в обработке</h2>
+<ul>
+<li><b>Anthropic, PBC (США)</b> — распознавание документов (файлы и результаты).</li>
+<li><b>Oracle Cloud</b> — сервер, на котором работают сайт и база данных, в Германии (Франкфурт).</li>
+<li><b>Cloudflare</b> — сеть, через которую проходят все запросы к сайту, включая загружаемые файлы: защита от атак, шифрованное соединение и проверка «вы не робот» на странице входа (Cloudflare Turnstile). Соединение шифруется между браузером и Cloudflare и между Cloudflare и нашим сервером. Cloudflare видит IP-адрес и технические данные браузера.</li>
+<li><b>Resend</b> — отправка писем с кодом входа (адрес почты и код).</li>
+<li><b>Telegram</b> — бот для подтверждения телефона; уведомления владельцу о заявках и сообщениях; зашифрованные ежедневные копии базы, которые приходят владельцу.</li>
+<li>Каждый из них обрабатывает данные по своим условиям. Мы передаём им только то, что нужно для их части работы.</li>
+</ul>
+
+<h2>Передача данных за пределы Казахстана</h2>
+<ul>
+<li>Наш сервер находится в Германии, сервис распознавания — в США. Cloudflare, Resend и Telegram тоже работают за пределами Казахстана. Поэтому данные, включая содержимое документов, передаются и обрабатываются за рубежом.</li>
+<li>Загружая документы, вы поручаете нам такую передачу. За то, что у вас есть основание передавать за рубеж данные третьих лиц из ваших документов, отвечаете вы.</li>
+<li>Если по вашим внутренним правилам или по закону документы нельзя передавать за рубеж, не загружайте их в Skaner.</li>
+</ul>
+
+<h2>Сколько мы храним данные</h2>
+<ul>
+<li>Загруженные файлы — не храним (только в памяти во время обработки); у сервиса распознавания — по его условиям, по общему правилу до 30 дней (исключения — выше).</li>
+<li>Результаты — 90 дней или до удаления вами.</li>
+<li>Аккаунт — пока вы его не удалите.</li>
+<li>Сеанс входа — до 30 дней без посещения сайта и не больше 90 дней; коды входа и счётчики ограничений — около суток.</li>
+<li>Заявки и сообщения — 90 дней после обработки, необработанные — до 365 дней; их копии в Telegram владельца — до 90 дней.</li>
+<li>Журналы сервера — ограниченное время, затем удаляются автоматически.</li>
+<li>Резервные копии базы делаются ежедневно: на сервере хранятся 14 последних, зашифрованные копии в Telegram владельца удаляются автоматически. Поэтому удалённые данные могут оставаться в резервных копиях до 90 дней после удаления. Копии используются только для восстановления после сбоя.</li>
+<li>После удаления аккаунта остаются: записи о списаниях и пополнениях страниц и журнал действий владельца (например, «подключён тариф» с кодом аккаунта) — пока они нужны для учёта, налогов и споров об оплате; в них нет почты, телефона и содержимого документов. А также отпечаток почты с пометкой «пробный период использован» и отпечаток телефона, получившего пробные страницы, — без срока, чтобы пробный период нельзя было получить повторно.</li>
+</ul>
+
+<h2>Cookies</h2>
+<p>Только технические cookies: sk_session (вход, до 30 дней), sk_login (шаг входа, 15 минут), sk_csrf (защита форм, до года), lang (язык, до года). Рекламных и аналитических cookies и счётчиков нет. Cloudflare может ставить собственные технические cookies для защиты сайта.</p>
+
+<h2>Ваши права и удаление</h2>
+<ul>
+<li>Вы можете узнать, какие данные о вас есть, исправить их, отозвать согласие и потребовать удаления.</li>
+<li>Большая часть данных видна в кабинете: история, результаты, баланс, код аккаунта. Результаты можно удалить на странице загрузки. В разделе «Аккаунт» можно удалить аккаунт со всеми данными, сразу. Владелец компании, в которой есть сотрудники, сначала убирает их или удаляет компанию.</li>
+<li>Остальные запросы присылайте через страницу «Контакты» и укажите код аккаунта. Так как мы не храним почту, мы проверяем запрос по аккаунту, из которого он отправлен. Мы отвечаем в сроки, установленные законом.</li>
+<li>Отзыв согласия на обработку данных аккаунта означает удаление аккаунта: без этих данных сервис работать не может.</li>
+<li>Вы можете обратиться с жалобой в уполномоченный орган по защите персональных данных Республики Казахстан или в суд.</li>
+</ul>
+
+<h2>Защита данных</h2>
+<p>Меры защиты описаны на странице «Безопасность». Ни одна мера не исключает риск полностью. Если мы обнаружим утечку, затрагивающую ваши данные, мы сообщим об этом на сайте или в кабинете и сделаем то, что требует закон.</p>
+
+<h2>Изменения политики</h2>
+<p>Если политика изменится, здесь будет указана дата новой редакции. Если вы не согласны с новой редакцией, вы можете прекратить пользоваться сервисом и удалить аккаунт.</p>
+{% endif %}
+</div></section>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends "app_shell.html" %}
+{% block title %}{{ t('rq_done_title') }}{% endblock %}
+{% block app %}
+<h1 class="h1s">{{ t('rq_done_h') }}</h1>
+<p class="lead">{{ t('rq_done_p') }}</p>
+<p class="fine">{{ t('rq_code')|replace('{code}', user.account_code or '') }}</p>
+<p><a class="btn ghost" href="/app/plans">{{ t('rq_back') }}</a></p>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "admin_base.html" %}
+{% block admin %}
+<h1 class="h1s">Payment requests</h1>
+{% if done %}<p class="note" role="status">{{ done }}</p>{% endif %}
+<p class="fine">Stored encrypted: 90 days after being marked "handled", 365 days if not marked.</p>
+{% if not items %}<p class="lead">No requests.</p>{% else %}
+<div class="tblwrap"><table class="hist">
+  <thead><tr><th scope="col">Date (UTC)</th><th scope="col">Account</th><th scope="col">Plan</th><th scope="col">Company</th><th scope="col">Contact</th><th scope="col">Comment</th><th scope="col">Telegram</th><th scope="col">Status</th></tr></thead>
+  <tbody>
+  {% for r in items %}
+  <tr><td>{{ r.date }}</td><td><a href="/admin/users/{{ r.code }}">{{ r.code }}</a></td><td>{{ r.plan }}</td>
+    {% if r.unreadable %}<td colspan="3" class="err">could not be decrypted</td>{% else %}<td>{{ r.company }}</td><td>{{ r.contact }}</td><td class="rqcomment">{{ r.comment }}</td>{% endif %}
+    <td>{% if r.notified %}sent{% else %}no{% endif %}</td>
+    <td>{% if r.status == 'done' %}handled {{ r.done_at }}{% else %}
+      <form method="post" action="/admin/requests/{{ r.id }}/done"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="btn xs" type="submit">Handled</button></form>
+    {% endif %}</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% endif %}
+{% endblock %}

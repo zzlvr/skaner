@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "docstruc"
+version = "0.1.0"
+description = "Document extraction engine: scans and photos to validated structured data (JSON, Excel, CSV)."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic>=1.0",
+    "google-genai>=1.0",
+    "pydantic>=2.7",
+    "openpyxl>=3.1",
+    "python-dotenv>=1.0",
+    "pymupdf>=1.24",
+    "opencv-python-headless>=4.9",
+    "pillow>=13.0",  # 13.0 fixes 24 CVEs of 12.3 (decoder overflows and DoS); uploaded images are untrusted
+    "pyasn1>=0.6.5",  # transitive (Google auth); 0.6.4 has 4 known CVEs
+    "certifi>=2026.10.19",  # drops a CA root whose intermediates had compromised keys (PYSEC-2026-4320)
+]
+
+[project.optional-dependencies]
+demo = ["streamlit>=1.40"]
+bot = ["python-telegram-bot>=21", "pymupdf>=1.24", "pillow>=13.0"]
+web = ["fastapi>=0.115", "uvicorn>=0.30", "jinja2>=3.1", "python-multipart>=0.0.9", "sqlalchemy>=2.0", "alembic>=1.13", "itsdangerous>=2.2", "httpx>=0.27", "cryptography>=42"]
+dev = ["pytest>=8", "httpx>=0.27"]
+
+[project.scripts]
+docstruc = "docstruc.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["docstruc*", "bot*", "web*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["no_trial: run with the product defaults (no free trial) instead of the old tests' trial"]
