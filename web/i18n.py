@@ -14,16 +14,10 @@ def _load(lang: str) -> dict:
     return json.loads((_DIR / f"{lang}.json").read_text(encoding="utf-8"))
 
 
-def pick_lang(cookie: str | None, accept: str | None) -> str:
-    if cookie in LANGS:
-        return cookie
-    for part in (accept or "").split(","):
-        code = part.split(";")[0].strip().lower()[:2]
-        if code in LANGS:
-            return code
-        if code == "ru":
-            return "ru"
-    return DEFAULT_LANG
+def pick_lang(cookie: str | None, accept: str | None = None) -> str:
+    """English for everyone; another language only when the visitor chose it with the switcher (the cookie).
+    The browser's language header is deliberately ignored."""
+    return cookie if cookie in LANGS else DEFAULT_LANG
 
 
 def translator(lang: str):

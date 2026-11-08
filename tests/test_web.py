@@ -24,9 +24,14 @@ def csrf(client) -> str:
 
 def test_index_all_languages(client):
     for lang in LANGS:
-        r = client.get("/", headers={"accept-language": lang})
+        r = client.get("/", headers={"cookie": f"lang={lang}"})
         assert r.status_code == 200
         assert f'<html lang="{lang}">' in r.text
+
+
+def test_english_for_everyone_unless_chosen(client):
+    r = client.get("/", headers={"accept-language": "ru-RU,ru;q=0.9,kk;q=0.8"})
+    assert '<html lang="en">' in r.text
 
 
 def test_locales_have_same_keys():

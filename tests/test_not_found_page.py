@@ -15,7 +15,7 @@ HTML = {"accept": "text/html,application/xhtml+xml"}
 def client(lang="ru", **kw):
     app = create_app(Settings(db_url="sqlite://", secret=SECRET, base_url="http://testserver", dev=True,
                               admin_emails=("boss@example.com",), **kw), mailer=FakeMailer(), clock=Clock())
-    return TestClient(app, headers={"accept-language": lang})
+    return TestClient(app, cookies={"lang": lang})
 
 
 def body(r):

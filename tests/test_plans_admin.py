@@ -54,7 +54,7 @@ class Env:
         self.client = self.new_client()
 
     def new_client(self, lang="ru"):
-        return TestClient(self.app, headers={"accept-language": lang})
+        return TestClient(self.app, cookies={"lang": lang})
 
     def db(self):
         return self.app.state.sessionmaker()

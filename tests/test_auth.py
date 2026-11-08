@@ -65,7 +65,7 @@ def make(dev=True, db_url="sqlite://", mailer=None, base="http://testserver"):
 @pytest.fixture
 def env():
     app, clock, mailer = make()
-    return app, TestClient(app, headers={"accept-language": "ru"}), clock, mailer
+    return app, TestClient(app, cookies={"lang": "ru"}), clock, mailer
 
 
 def token(client, path="/login"):
@@ -519,7 +519,7 @@ def test_new_pages_render_in_all_languages(env):
     words = {"ru": ("Мы отправили код", "Вы вошли"), "kk": ("Поштаңызға код жібердік", "Сіз аккаунтқа кірдіңіз"),
              "en": ("We sent a code", "You are signed in")}
     for lang in LANGS:
-        c = TestClient(app, headers={"accept-language": lang})
+        c = TestClient(app, cookies={"lang": lang})
         ask(c, f"{lang}@example.com")
         page = c.get("/login/code")
         assert f'<html lang="{lang}">' in page.text and words[lang][0] in page.text

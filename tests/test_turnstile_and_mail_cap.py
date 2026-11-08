@@ -36,7 +36,7 @@ def site(turnstile=None, **cfg):
     settings = Settings(db_url="sqlite://", secret=SECRET, base_url="http://testserver", dev=True,
                         turnstile_site_key="site-key" if turnstile else "", **cfg)
     app = create_app(settings, mailer=mailer, clock=clock, notifier=notifier, turnstile=turnstile)
-    return app, TestClient(app, headers={"accept-language": "ru"}), clock, mailer, notifier
+    return app, TestClient(app, cookies={"lang": "ru"}), clock, mailer, notifier
 
 
 # ---------- Turnstile ----------
