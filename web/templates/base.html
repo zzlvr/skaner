@@ -20,7 +20,7 @@
     <nav class="nav" aria-label="main">
       <a href="/#feat">{{ t('nav_feat') }}</a>
       <a href="/#how">{{ t('nav_how') }}</a>
-      <a href="/#prices">{{ t('nav_prices') }}</a>
+      {% if paid_plans %}<a href="/#prices">{{ t('nav_prices') }}</a>{% endif %}
     </nav>
     <div class="nav-r">
       <details class="langmenu">
@@ -47,7 +47,7 @@
 <footer class="foot">
   <div class="wrap fgrid">
     <div><a class="brand" href="/">skaner</a><p>{{ t('foot_tag') }}</p></div>
-    <div><b>{{ t('foot_product') }}</b><a href="/#feat">{{ t('nav_feat') }}</a><a href="/#prices">{{ t('nav_prices') }}</a><a href="/bot">{{ t('foot_bot') }}</a></div>
+    <div><b>{{ t('foot_product') }}</b><a href="/#feat">{{ t('nav_feat') }}</a>{% if paid_plans %}<a href="/#prices">{{ t('nav_prices') }}</a>{% endif %}<a href="{{ source_url }}">{{ t('foot_source') }}</a></div>
     <div><b>{{ t('foot_company') }}</b><a href="/security">{{ t('foot_security') }}</a><a href="/contacts">{{ t('foot_contacts') }}</a></div>
     <div><b>{{ t('foot_legal') }}</b><a href="/privacy">{{ t('foot_privacy') }}</a><a href="/terms">{{ t('foot_terms') }}</a></div>
   </div>

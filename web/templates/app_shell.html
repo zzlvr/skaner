@@ -5,19 +5,17 @@
     <nav>
       <a href="/app"{% if nav == 'up' %} aria-current="page"{% endif %}>{{ t('nav_up') }}</a>
       <a href="/app/history"{% if nav == 'docs' %} aria-current="page"{% endif %}>{{ t('nav_docs') }}</a>
-      <a href="/app/plans"{% if nav == 'plans' %} aria-current="page"{% endif %}>{{ t('nav_plans') }}</a>
+      {% if paid_plans %}<a href="/app/plans"{% if nav == 'plans' %} aria-current="page"{% endif %}>{{ t('nav_plans') }}</a>{% endif %}
       <a href="/app/company"{% if nav == 'co' %} aria-current="page"{% endif %}>{{ t('nav_company') }}</a>
       <a href="/app/account"{% if nav == 'acc' %} aria-current="page"{% endif %}>{{ t('nav_settings') }}</a>
-      {% if is_admin %}<a href="/admin">Админка</a>{% endif %}
+      {% if is_admin %}<a href="/admin">Admin</a>{% endif %}
     </nav>
-    <div class="sbal">
+    {% if paid_plans %}<div class="sbal">
       {% if co_org %}<div class="coname">{{ t('bal_org') }}</div>{% endif %}
       {% if bal.total > 0 %}
       <div><b>{{ bal.total }}</b> {{ t('bal_pages') }}</div>
       {% if bal.trial_state == 'active' %}<div>{{ t('bal_days')|replace('{n}', days_left|string) }}</div>{% endif %}
       {% if plan_line %}<div>{{ plan_line }}</div>{% endif %}
-      {% if need_phone %}<div><a href="/app/phone">{{ phone_more }}</a></div>{% endif %}
-      {% elif need_phone and not trial_blocked %}<div>{{ t('bal_none') }}</div><div><a href="/app/phone">{{ phone_more }}</a></div>
       {% elif plan_line %}<div>{{ plan_line }}</div>
       {% elif bal.plan_state == 'expired' %}<div>{{ t('bal_plan_over') }}</div>
       {% elif bal.trial_state == 'expired' %}<div>{{ t('bal_expired') }}</div>
@@ -25,7 +23,7 @@
       {% elif trial_blocked %}<div>{{ t('bal_blocked') }}</div>
       {% else %}<div>{{ t('bal_none') }}</div>{% endif %}
       {% if bal.show_pay and nav != 'plans' and not co_member %}<a class="spay" href="/app/plans">{{ t('pl_pay') }}</a>{% endif %}
-    </div>
+    </div>{% endif %}
     <form class="logout" method="post" action="/logout">
       <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
       <button class="btn ghost" type="submit">{{ t('logout') }}</button>

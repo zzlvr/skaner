@@ -52,7 +52,7 @@ def test_default_and_clamped_setting(monkeypatch):
     assert Settings(**base, trial_daily_pages=-5).trial_daily_pages == 0
     monkeypatch.setenv("WEB_DEV", "1")
     monkeypatch.setenv("WEB_BASE_URL", "http://localhost:8000")
-    monkeypatch.delenv("WEB_PHONE_VERIFY", raising=False)
+
     monkeypatch.setenv("WEB_DAILY_PAGES", "300")
     monkeypatch.setenv("WEB_TRIAL_DAILY_PAGES", "500")
     assert Settings.load().trial_daily_pages == 300

@@ -26,7 +26,7 @@ from .admin import router as admin_router
 from .cabinet import purge_results, router as cabinet_router
 from .company_routes import router as company_router
 from .contacts import router as contacts_router
-from .config import LANGS, Settings, check_phone_settings
+from .config import LANGS, Settings
 from .db import ensure_schema, make_engine, make_sessionmaker
 from .deps import (
     CSRF_COOKIE, LOGIN_COOKIE, SESSION_COOKIE, AccountBlocked, CsrfFailed, LoginRequired, ReauthRequired, csrf_protect,
@@ -38,7 +38,6 @@ from .jobs import Context, MemoryBudget, UploadGate, mark_stale
 from .mailer import Mailer, make_mailer
 from .models import User
 from .turnstile import Turnstile, make_turnstile
-from .phone_routes import router as phone_router
 
 log = logging.getLogger("skaner.web")
 HERE = Path(__file__).parent
@@ -54,6 +53,7 @@ CSP = (
 CSP_CAPTCHA = CSP.replace("script-src 'self'", "script-src 'self' https://challenges.cloudflare.com") +     "; frame-src https://challenges.cloudflare.com"
 
 # Pages that are not written yet; they show a "coming soon" stub, never a 404.
+SOURCE_URL = "https://github.com/zzlvr/skaner"
 LANG_NAMES = (("en", "English"), ("ru", "Русский"), ("kk", "Қазақша"))
 STUB_PAGES = ("bot",)
 LEGAL_PAGES = {"privacy": "legal_privacy.html", "terms": "legal_terms.html", "security": "legal_security.html"}
@@ -118,7 +118,6 @@ def create_app(
     the configured mailer, real UTC time, the Claude backend, a pool of WEB_WORKERS background threads and the
     Telegram notice to the owner (or none when TELEGRAM_BOT_TOKEN / BOT_OWNER_ID are not set)."""
     settings = settings or Settings.load()
-    check_phone_settings(settings)  # phone confirmation on without its bot name or secret: refuse to start
     mailer = mailer or make_mailer(settings)  # production without a mail key fails here, at startup
     clock = clock or utcnow
     engine = make_engine(settings.db_url)
@@ -155,7 +154,6 @@ def create_app(
     app.state.alerter = Alerter(app.state.notifier)
     app.state.jobs = Context(settings, app.state.sessionmaker, clock, backend_factory or default_backend_factory(settings),
                              app.state.alerter)
-    app.state.demo_fp = demo_fp  # the demo account counts as phone-confirmed (web/phone.py)
     app.state.lang_names = LANG_NAMES
     app.state.turnstile = turnstile or make_turnstile(settings)  # None = no bot check (dev, tests)
     app.state.payments = payments.ManualPayment(settings, app.state.notifier, app.state.sessionmaker)
@@ -279,7 +277,7 @@ def create_app(
         lang = lang_of(request)
         request.state.csrf_used = True
         context = {
-            "lang": lang, "langs": LANGS, "lang_names": LANG_NAMES, "t": translator(lang),
+            "paid_plans": settings.paid_plans, "source_url": SOURCE_URL, "lang": lang, "langs": LANGS, "lang_names": LANG_NAMES, "t": translator(lang),
             "csrf_token": sec.csrf_token(settings, request.state.csrf_id),
             "turnstile_site_key": settings.turnstile_site_key if app.state.turnstile else "", **ctx,
         }
@@ -437,7 +435,5 @@ def create_app(
     app.include_router(contacts_router)  # /contacts: write to the owner (signed-in visitors)
     app.include_router(cabinet_router)  # /account, /app/... (upload, results, downloads, history, plans, account)
     app.include_router(company_router)  # /app/company and /join/<token> (company cabinets, web/company.py)
-    if settings.phone_verify:  # off: the routes do not exist at all, every method is a plain 404
-        app.include_router(phone_router)  # /app/phone and /internal/phone-verified
     app.include_router(admin_router)  # /admin/... (owner only; 404 for everyone else)
     return app

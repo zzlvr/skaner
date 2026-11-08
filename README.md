@@ -11,7 +11,7 @@ Hosted version: **https://skaner.app** · License: **AGPL-3.0**
 The engine does not run on a model of its own. You give it your own API key (Anthropic Claude or Google Gemini) and pay your provider directly. Your documents go to your provider under your agreement with it; there is no middleman account.
 
 - **Run it yourself**: free, the key never leaves your machine (see below).
-- **Use the hosted site**: paste your own key on the upload page (kept in the server's memory for that upload only, never stored or logged), or pay for pages and skip the key.
+- **Use the hosted site**: paste your own key on the upload page (kept in the server's memory for that upload only, never stored or logged). The service is free; there are no paid plans at the moment.
 
 ## Features
 
@@ -20,7 +20,7 @@ The engine does not run on a model of its own. You give it your own API key (Ant
 - Output: JSON, Excel (Documents / Line items / Review sheets, flagged cells highlighted), CSV (opens correctly in Russian-locale Excel), Excel prepared for 1C import, text PDF.
 - Several documents on one photo are found automatically; one document across several photos is supported.
 - Provider-agnostic model layer (`docstruc/llm/`). Backends: Anthropic Claude, Google Gemini.
-- Web app (`web/`, FastAPI): sign-in by email code, batches, history, company accounts, admin. Telegram bot (`bot/`).
+- Web app (`web/`, FastAPI): sign-in by email code, batches, history, company accounts, admin.
 
 ## Quick start (command line)
 
@@ -58,7 +58,7 @@ Honestly: measured on a **small** set. On 8 real Kazakhstan receipts (286 fields
 
 ## Status and roadmap
 
-Working: extraction, checks, exports, web app, bot. Planned: OpenAI backend, QuickBooks and Xero exports, API keys for programmatic access, pay-per-request endpoint for AI agents (x402).
+Working: extraction, checks, exports, web app. Planned: OpenAI backend, QuickBooks and Xero exports, API keys for programmatic access, pay-per-request endpoint for AI agents (x402).
 
 ## License
 

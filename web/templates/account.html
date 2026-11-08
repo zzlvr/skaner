@@ -11,11 +11,11 @@
 </section>
 <section class="card acsec">
   <h2 class="h2s">{{ t('ac_state') }}</h2>
-  {% for line in lines %}<p>{{ line }}</p>{% endfor %}
+  {% if paid_plans %}{% for line in lines %}<p>{{ line }}</p>{% endfor %}{% endif %}
   {% if user_lang %}<p class="fine">{{ t('lang_label') }}: {{ user_lang }}</p>{% endif %}
   <div class="exp-row">
     <a class="btn" href="/app">{{ t('acc_go') }}</a>
-    <a class="btn ghost" href="/app/plans">{{ t('nav_plans') }}</a>
+    {% if paid_plans %}<a class="btn ghost" href="/app/plans">{{ t('nav_plans') }}</a>{% endif %}
   </div>
 </section>
 <section class="card acsec">

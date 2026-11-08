@@ -21,7 +21,6 @@ from fastapi.responses import JSONResponse, PlainTextResponse, RedirectResponse,
 from sqlalchemy import delete, func, select, update
 from sqlalchemy.orm import Session
 
-from bot.session import LONG_RECEIPT_MAX_PARTS
 from docstruc.core.models import ExtractionResult
 from docstruc.doctypes import DOCTYPES
 from docstruc.exporters import csv_export, excel, i18n as xi18n, json_export, onec
@@ -32,14 +31,13 @@ from . import balance as bal
 from . import company
 from . import crypto
 from . import payments
-from . import phone
 from . import security as sec
 from .deps import CSRF_COOKIE, SESSION_COOKIE, CsrfFailed, csrf_protect, get_db, origin_ok, require_user
 from .i18n import translator
 from .jobs import ACTIVE, BYOK_PROVIDERS, ByokKey, active_batch, run_batch
 from .models import Batch, User
 from .pdf_formats import KINDS, SCAN, TEXT, text_pdf
-from .upload import FORM_OVERHEAD, UploadRejected, boundary_of, parse_upload, validate
+from .upload import FORM_OVERHEAD, LONG_RECEIPT_MAX_PARTS, UploadRejected, boundary_of, parse_upload, validate
 
 log = logging.getLogger("skaner.web.cabinet")
 router = APIRouter()
@@ -72,8 +70,8 @@ REFUSALS = {
     "no_pages": ("err_no_pages", 402), "active": ("err_active", 409), "hourly": ("err_hourly", 429),
     "daily": ("err_daily", 503), "trial_daily": ("err_trial_daily", 503), "busy": ("err_busy", 503), "batch_too_large": ("err_batch_too_large", 413),
     "too_many_files": ("err_too_many_files", 413), "no_files": ("err_no_files", 400), "bad_form": ("err_bad_form", 400),
-    "long_parts": ("err_long_parts", 400), "trial_ip": ("err_trial_ip", 402), "byok_bad": ("err_byok_bad", 400), "byok_blocked": ("err_byok_blocked", 429),
-    "scan_daily": ("err_scan_daily", 429), "phone": ("err_phone", 402),
+    "long_parts": ("err_long_parts", 400), "trial_ip": ("err_trial_ip", 402), "byok_bad": ("err_byok_bad", 400), "key_required": ("err_key_required", 400), "byok_blocked": ("err_byok_blocked", 429),
+    "scan_daily": ("err_scan_daily", 429),
     "no_pages_org": ("err_no_pages_org", 402), "org_blocked": ("err_org_blocked", 403),
 }
 FILE_REASONS = {
@@ -149,18 +147,11 @@ def purge_results(db: Session, now: datetime) -> int:
     return n
 
 
-def _need_phone(request: Request, db: Session, user: User) -> bool:
-    st = _st(request)
-    return phone.need_phone(db, st.settings, user, _now(request), getattr(st, "demo_fp", None))
-
-
 def shell(request: Request, db: Session, user: User, nav: str, crumbs: list) -> dict:
     now = _now(request)
     ctx = company.context(db, user)
     b = bal.balance(ctx.wallet, now)  # in a company: the owner's pages, shared by everyone in it
     t = _t(request)
-    # A member cannot confirm the owner's phone, and the member's own trial is not used inside the company.
-    need_phone = False if ctx.is_member else _need_phone(request, db, user)
     plan_line = ""
     if b.plan_state in ("active", "used") and b.plan_expires_at is not None:
         plan_line = fill(t("bal_plan"), plan=t("plan_" + b.plan), date=f"{b.plan_expires_at:%d.%m.%Y}")
@@ -170,9 +161,6 @@ def shell(request: Request, db: Session, user: User, nav: str, crumbs: list) -> 
                                                                                _ipf(request), now),
         "co_org": ctx.org, "co_member": ctx.is_member,
         "plan_line": plan_line,
-        # Phone confirmation (web/phone.py): the sidebar and the upload page point to /app/phone.
-        "need_phone": need_phone,
-        "phone_more": fill(t("bal_phone"), n=phone.bonus_pages(_st(request).settings)) if need_phone else "",
         # The owner gets an "Админка" link in the menu; everyone else never sees that /admin exists.
         "is_admin": user.email_fp in getattr(_st(request), "admin_fps", ()),
     }
@@ -260,8 +248,7 @@ def state_lines(t, b: bal.Balance, now: datetime) -> list[str]:
 def _touch(request: Request, db: Session, user: User) -> None:
     """Cabinet visit housekeeping: the trial grant and zeroing an expired plan's pages (with its ledger row)."""
     now, st = _now(request), _st(request)
-    pages = phone.first_grant_pages(st.settings, user, getattr(st, "demo_fp", None))
-    bal.ensure_trial(db, st.settings, user, _ipf(request), now, pages=pages)
+    bal.ensure_trial(db, st.settings, user, _ipf(request), now)
     bal.expire_plan(db, user, now)
     ctx = company.context(db, user)
     if ctx.wallet is not None and ctx.wallet.id != user.id:
@@ -333,6 +320,8 @@ def plan_cards(t) -> list[dict]:
 
 @router.get("/app/plans")
 def plans(request: Request, user: User = Depends(require_user), db: Session = Depends(get_db)):
+    if not _st(request).settings.paid_plans:
+        return not_found(request, db, user)
     _touch(request, db, user)
     t, now = _t(request), _now(request)
     return _st(request).render(request, "app_plans.html", cards=plan_cards(t),
@@ -356,6 +345,8 @@ def request_page(request: Request, db: Session, user: User, plan: str, values: d
 
 @router.get("/app/plans/request")
 def request_form(request: Request, plan: str = "", user: User = Depends(require_user), db: Session = Depends(get_db)):
+    if not _st(request).settings.paid_plans:
+        return not_found(request, db, user)
     return request_page(request, db, user, plan)
 
 
@@ -364,6 +355,8 @@ def request_submit(request: Request, background: BackgroundTasks, plan: str = Fo
                    contact: str = Form(""), comment: str = Form(""), user: User = Depends(require_user),
                    db: Session = Depends(get_db)):
     st, t, now = _st(request), _t(request), _now(request)
+    if not st.settings.paid_plans:
+        return not_found(request, db, user)
     # Shown back in the form on an error (escaped by the template); cut so a huge value is not echoed.
     values = {"company": company[:payments.COMPANY_MAX * 2], "contact": contact[:payments.CONTACT_MAX * 2],
               "comment": comment[:payments.COMMENT_MAX * 2]}
@@ -686,6 +679,8 @@ def _admit(request: Request, user_id: int, doctype: str, fmt: str, one_document:
     s = st.settings
     scan = fmt == SCAN
     paid = not scan and not byok
+    if paid and not s.paid_plans:  # free mode: nothing runs on the site's own key
+        raise Refusal("key_required")
     with st.sessionmaker() as db:
         purge_results(db, now)
         user = db.get(User, user_id)
@@ -708,8 +703,6 @@ def _admit(request: Request, user_id: int, doctype: str, fmt: str, one_document:
             if total <= 0 and bal.trial_blocked_by_ip(db, s, wallet, _ipf(request), now):
                 raise Refusal("trial_ip")
             if pages > total:
-                if _need_phone(request, db, wallet):
-                    raise Refusal("phone", need=pages, left=max(0, total), n=phone.bonus_pages(s))
                 raise Refusal("no_pages", need=pages, left=max(0, total))
             if bal.daily_used(db, now) >= s.daily_pages:
                 raise Refusal("daily")

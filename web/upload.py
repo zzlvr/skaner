@@ -21,6 +21,7 @@ from .config import Settings
 from .deps import CsrfFailed
 
 FORM_OVERHEAD = 1024 * 1024  # multipart headers and small fields on top of the file bytes
+LONG_RECEIPT_MAX_PARTS = 10  # photos of one long receipt that may be joined into one document
 MAX_FIELD = 1024
 MAX_FIELDS = 16
 MAX_HEADER = 4096

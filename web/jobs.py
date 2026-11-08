@@ -23,7 +23,7 @@ from datetime import datetime, timedelta
 from sqlalchemy import select, update
 from sqlalchemy.orm import sessionmaker
 
-from bot.billing import Job, cost_units
+from .billing_rules import Job, cost_units
 from docstruc.core.files import page_count, split_pages
 from docstruc.core.models import Document, ExtractionResult
 from docstruc.core.pipeline import extract, extract_all

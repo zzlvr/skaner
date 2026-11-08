@@ -26,7 +26,6 @@ from . import auth
 from . import balance as bal
 from . import company
 from . import payments
-from . import phone
 from . import security as sec
 from .accounts import PLAN_DAYS, PLAN_NAMES, PLANS
 from .deps import CSRF_COOKIE, CsrfFailed, ReauthRequired, current_user, get_db, origin_ok
@@ -48,7 +47,6 @@ DONE = {
     "plan": "Plan switched on.", "topup": "Pages added.", "extend": "Plan extended.",
     "end": "Plan ended.", "trial": "Trial changed.", "block": "User blocked.",
     "unblock": "User unblocked.", "request": "Request marked as handled.",
-    "phone": "Phone binding removed: the user can confirm a number again.",
     "org": "User removed from the company.",
 }
 REASONS = {
@@ -279,15 +277,11 @@ def user_page(request: Request, db: Session, admin: User, target: User, error: s
         org_member = membership.role == company.MEMBER
     else:
         info.append(("Company", "none"))
-    # Phone confirmation: only yes/no is shown, never the fingerprint.
-    show_phone = request.app.state.settings.phone_verify or phone.has_binding(db, target)
-    if show_phone:
-        info.append(("Phone confirmed", "yes" if target.phone_fp else "no"))
     return _render(
         request, "admin_user.html", admin, status, target=target, is_me=target.email_fp in request.app.state.admin_fps, info=info, error=error, done=DONE.get(done, ""),
         plans=[(k, f"{PLAN_NAMES[k]} — {p.quota} pages, {p.price} ₸") for k, p in PLANS.items()],
         plan_days=PLAN_DAYS, max_topup=bal.MAX_TOPUP, max_trial_pages=bal.MAX_TRIAL_PAGES,
-        max_trial_days=bal.MAX_TRIAL_DAYS, phone_reset=show_phone and phone.has_binding(db, target), max_extend=bal.MAX_EXTEND_DAYS, plan_active=b.plan_state != "none"
+        max_trial_days=bal.MAX_TRIAL_DAYS, max_extend=bal.MAX_EXTEND_DAYS, plan_active=b.plan_state != "none"
         and bal.plan_active(target, now), is_self=target.id == admin.id, nav="users", org_member=org_member,
         batches=[{"date": _dt(x.created_at), "kind": KINDS.get(x.fmt, "Table " + x.fmt), "doctype": x.doctype or "—",
                   "pages": x.pages_charged if x.status in ("done", "failed") else x.pages_estimated,
@@ -372,17 +366,6 @@ def act_trial(code: str, request: Request, pages: str = Form(""), days: str = Fo
     bal.set_trial(db, target, p, d, clean or f"trial {p} pages / {d} days", now)
     audit(db, admin, "trial_set", target, f"pages={p} days={d}", now)
     return _back(target, "trial")
-
-
-@router.post("/users/{code}/phone-reset")
-def act_phone_reset(code: str, request: Request, admin: User = Depends(admin_post), db: Session = Depends(get_db)):
-    """For people who changed their number: removes users.phone_fp and the number's "already had a trial" record,
-    so the number (and this account) can be confirmed again. Pages already given are not touched."""
-    target, now = _target(db, code), _now(request)
-    if not phone.reset(db, target):
-        return user_page(request, db, admin, target, "No phone is bound.", 409)
-    audit(db, admin, "phone_reset", target, "phone binding removed", now)
-    return _back(target, "phone")
 
 
 @router.post("/users/{code}/leave-org")

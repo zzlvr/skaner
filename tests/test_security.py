@@ -7,8 +7,6 @@ import pytest
 from openpyxl import load_workbook
 from PIL import Image
 
-from bot.quota import QuotaStore
-from bot.session import Batch, Sessions
 from docstruc.core import files
 from docstruc.core.models import Document, ExtractionResult
 from docstruc.exporters import export
@@ -72,44 +70,6 @@ def test_oversized_images_are_shrunk_for_the_api():
     assert mime == "image/jpeg" and max(Image.open(BytesIO(data)).size) <= 4000
     small = Document(name="s.jpg", mime_type="image/jpeg", data=_image())
     assert _fit_image(small) == (small.data, "image/jpeg")
-
-
-def test_idle_sessions_are_forgotten(monkeypatch):
-    import bot.session as session
-    sessions = Sessions()
-    batch = sessions.get(1)
-    batch.files.append(Document(name="a.jpg", mime_type="image/jpeg", data=b"x" * 1000))
-    assert sessions.total_size() == 1000
-    batch.touched = time.monotonic() - session.IDLE_SECONDS - 1
-    sessions.get(2)
-    assert sessions.total_size() == 0
-
-
-def test_free_scan_pages_are_counted_per_day():
-    from datetime import date
-    store = QuotaStore(":memory:", free_docs=5, daily_limit=50)
-    store.add_scan_pages(1, 30, today=date(2026, 10, 19))
-    store.add_free_failures(1, 1, today=date(2026, 10, 19))
-    assert store.scan_pages_used(1, today=date(2026, 10, 19)) == 30
-    assert store.free_failures_used(1, today=date(2026, 10, 19)) == 1
-
-
-def test_forged_feedback_buttons_are_ignored():
-    import asyncio
-    from types import SimpleNamespace
-    from bot.main import BotApp
-
-    app = BotApp.__new__(BotApp)
-    app.quota = QuotaStore(":memory:", free_docs=5, daily_limit=50)
-    edits = []
-
-    async def edit_reply_markup(reply_markup=None):
-        edits.append(1)
-
-    update = SimpleNamespace(callback_query=SimpleNamespace(edit_message_reply_markup=edit_reply_markup),
-                             effective_user=SimpleNamespace(language_code="ru"), effective_chat=SimpleNamespace(id=1))
-    asyncio.run(app._on_feedback_button(update, None, Batch(), "bad:" + "x" * 50))
-    assert edits == [] and app.quota.stats()["fb_bad"] == 0
 
 
 def test_database_backup_keeps_recent_copies(tmp_path):

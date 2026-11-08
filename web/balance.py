@@ -28,7 +28,7 @@ from sqlalchemy import func, select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from bot.billing import FREE_FAILURES_PER_DAY, Job, settle
+from .billing_rules import FREE_FAILURES_PER_DAY, Job, settle
 
 from .accounts import PLAN_DAYS, PLANS
 from .config import Settings

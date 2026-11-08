@@ -175,7 +175,7 @@ def test_byok_key_object_hides_and_wipes_the_key():
 
 # ---------- no free trial (decision 67) ----------
 
-@pytest.mark.no_trial
+@pytest.mark.product_defaults
 def test_new_user_gets_no_free_pages_and_must_bring_a_key_or_pay(seen):
     calls, holder = seen
     e = holder["env"] = Env()
@@ -183,7 +183,8 @@ def test_new_user_gets_no_free_pages_and_must_bring_a_key_or_pay(seen):
     assert bal.balance(e.user(), e.clock()).total == 0
     with e.db() as s:
         assert not [x for x in s.scalars(select(LedgerEntry)) if x.reason.startswith("trial")]
-    assert post(c, key=None).status_code == 402  # nothing free without a key
+    r = post(c, key=None)
+    assert r.status_code == 400 and "Paste your own API key" in r.text or "Вставьте свой ключ" in r.text  # no key, no recognition
     assert latest(e) is None and not calls
     batch_url(post(c))  # with the user's own key it runs
     assert latest(e).status == "done" and latest(e).byok
@@ -216,3 +217,17 @@ def test_a_user_whose_keys_keep_being_rejected_is_stopped_for_the_day(seen):
     assert r.status_code == 429 and "Слишком много отклонённых ключей" in r.text and not calls
     e.clock.advance(hours=25)
     batch_url(post(c))  # the next day it works again
+
+
+@pytest.mark.product_defaults
+def test_free_mode_has_no_prices_plans_or_payment_requests():
+    e = Env()
+    c = e.login()
+    landing = e.new_client("en").get("/").text
+    assert 'id="prices"' not in landing and "/#prices" not in landing and "Source code" in landing
+    assert "/app/plans" not in c.get("/app").text  # no Plans link, no balance block
+    assert c.get("/app/plans").status_code == 404 and c.get("/app/plans/request?plan=biz").status_code == 404
+    r = c.post("/app/plans/request", data={"csrf_token": csrf(c), "plan": "biz", "contact": "x@y.z", "company": "A",
+                                          "comment": "b"})
+    assert r.status_code == 404
+    assert 'name="byok_key"' in c.get("/app").text  # the way to use the service is the own key

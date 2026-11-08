@@ -50,14 +50,7 @@
     <label>Note <input name="note" type="text" maxlength="200"></label>
     <button class="btn ghost" type="submit">Set</button>
   </form>
-  {% if phone_reset %}
-  <form class="card admform" method="post" action="/admin/users/{{ target.account_code }}/phone-reset">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-    <b>Remove the phone binding</b>
-    <span class="fine">For people who changed their number: the number can be confirmed again. Pages do not change.</span>
-    <button class="btn ghost" type="submit">Remove binding</button>
-  </form>
-  {% endif %}
+
   {% if org_member %}
   <form class="card admform" method="post" action="/admin/users/{{ target.account_code }}/leave-org">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">

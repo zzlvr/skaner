@@ -3,7 +3,6 @@ FROM python:3.12-slim
 WORKDIR /app
 COPY pyproject.toml README.md alembic.ini ./
 COPY docstruc docstruc
-COPY bot bot
 COPY web web
 RUN pip install --no-cache-dir ".[web]"
 

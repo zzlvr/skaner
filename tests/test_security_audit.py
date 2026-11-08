@@ -28,15 +28,12 @@ from fastapi.testclient import TestClient
 from PIL import GifImagePlugin, Image
 from sqlalchemy import select
 
-from bot import phone_verify as pv
 from docstruc.core import files
 from docstruc.digitize import sanitize_html
 from test_app import SECRET, Clock, FakeBackend, FakeMailer, batch_url, csrf, pdf, png, upload
 from test_app import Env as AppEnv
 from test_company import Env as CoEnv
 from test_company import create, join, link_token
-from test_phone_verify import BOT, FP_A, PSECRET, get_link
-from test_phone_verify import Env as PhoneEnv
 from test_plans_admin import ADMIN, RecordingNotifier
 from test_plans_admin import Env as AdminEnv
 from web import security as sec
@@ -126,13 +123,6 @@ def test_internal_is_a_plain_404_when_phone_confirmation_is_off():
         assert e.client.request(m, "/app/phone").status_code == 404, m
 
 
-def test_internal_wrong_methods_are_404_when_phone_confirmation_is_on():
-    e = PhoneEnv()
-    c = e.new_client()
-    for m in ("GET", "HEAD", "OPTIONS", "PUT", "PATCH", "DELETE"):
-        assert c.request(m, "/internal/phone-verified").status_code == 404, m
-
-
 # ---------- request size: every POST is limited, the answer does not depend on the path (FIX) ----------
 
 def test_every_post_except_upload_has_a_small_body_limit():
@@ -173,47 +163,6 @@ def test_post_without_length_is_refused():
     assert r.status_code == 411
 
 
-# ---------- the internal endpoint: loopback only outside dev (FIX) ----------
-
-def _prod_phone_app():
-    clock = Clock()
-    s = Settings(db_url="sqlite://", secret=SECRET, base_url="https://skaner.app", dev=False, phone_verify=True,
-                 bot_username=BOT, phone_verify_secret=PSECRET)
-    return create_app(s, mailer=FakeMailer(), clock=clock, executor=InlineExecutor(),
-                      backend_factory=lambda: FakeBackend({}, []), notifier=RecordingNotifier()), clock
-
-
-def test_internal_endpoint_answers_only_on_loopback_outside_dev():
-    app, clock = _prod_phone_app()
-    ts = int(clock().replace(tzinfo=timezone.utc).timestamp())
-    token = "t" * 32
-    body = json.dumps({"token": token, "phone_fp": FP_A, "ts": ts})
-    headers = {"Content-Type": "application/json", pv.SIGNATURE_HEADER: pv.sign(PSECRET, token, FP_A, ts)}
-    outside = TestClient(app, base_url="https://testserver", client=("203.0.113.9", 4000))
-    assert outside.post("/internal/phone-verified", content=body, headers=headers).status_code == 404
-    local = TestClient(app, base_url="https://testserver", client=("127.0.0.1", 4000))
-    r = local.post("/internal/phone-verified", content=body, headers=headers)
-    assert r.status_code == 410 and r.json() == {"status": "invalid"}  # reached the logic: unknown token
-
-
-def test_phone_confirmation_is_single_use_and_signed():
-    e = PhoneEnv()
-    e.login()
-    token = get_link(e.client)
-    ts = int(e.clock().replace(tzinfo=timezone.utc).timestamp())
-    body = json.dumps({"token": token, "phone_fp": FP_A, "ts": ts})
-    good = {"Content-Type": "application/json", pv.SIGNATURE_HEADER: pv.sign(PSECRET, token, FP_A, ts)}
-    c = e.new_client()
-    forged = dict(good, **{pv.SIGNATURE_HEADER: pv.sign("x" * 40, token, FP_A, ts)})
-    assert c.post("/internal/phone-verified", content=body, headers=forged).json()["status"] == "denied"
-    assert c.post("/internal/phone-verified", content=body, headers=good).json()["status"] == "ok"
-    assert c.post("/internal/phone-verified", content=body, headers=good).json()["status"] == "invalid"  # replay
-    old = ts - 301
-    stale = {"Content-Type": "application/json", pv.SIGNATURE_HEADER: pv.sign(PSECRET, token, FP_A, old)}
-    stale_body = json.dumps({"token": token, "phone_fp": FP_A, "ts": old})
-    assert c.post("/internal/phone-verified", content=stale_body, headers=stale).json()["status"] == "denied"
-
-
 # ---------- configuration: development mode cannot run on a public address (FIX) ----------
 
 def test_dev_mode_refuses_a_public_base_url(monkeypatch):
@@ -252,10 +201,10 @@ def test_short_secret_is_refused_in_production(monkeypatch):
 
 def test_settings_repr_shows_no_secrets():
     s = Settings(db_url="sqlite://", secret="ROOT-SECRET-" + "q" * 30, base_url="x", dev=True,
-                 resend_api_key="re_SECRETKEY", telegram_token="1:SECRETTOKEN", phone_verify_secret="P" * 40,
+                 resend_api_key="re_SECRETKEY", telegram_token="1:SECRETTOKEN",
                  admin_emails=("boss@secret.example",), demo_code="654321")
     text = repr(s) + str(s)
-    for secret in ("ROOT-SECRET", "re_SECRETKEY", "SECRETTOKEN", "P" * 40, "boss@secret", "654321"):
+    for secret in ("ROOT-SECRET", "re_SECRETKEY", "SECRETTOKEN", "boss@secret", "654321"):
         assert secret not in text
 
 

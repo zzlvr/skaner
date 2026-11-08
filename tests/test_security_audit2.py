@@ -23,10 +23,7 @@ from datetime import timezone
 import pytest
 from fastapi.testclient import TestClient
 
-from bot import phone_verify as pv
 from test_app import Env, csrf, png, upload
-from test_phone_verify import FP_A, PSECRET
-from test_security_audit import _prod_phone_app
 from web import cabinet
 from web import security as sec
 from web.jobs import UploadGate
@@ -204,15 +201,3 @@ def test_the_real_form_with_an_empty_camera_input_still_works():
 
 
 # ---------- the internal endpoint: never through the proxy (FIX) ----------
-
-@pytest.mark.parametrize("header", ["X-Forwarded-For", "X-Real-IP", "Forwarded", "CF-Connecting-IP"])
-def test_internal_endpoint_refuses_requests_that_came_through_the_proxy(header):
-    app, clock = _prod_phone_app()
-    ts = int(clock().replace(tzinfo=timezone.utc).timestamp())
-    token = "t" * 32
-    body = json.dumps({"token": token, "phone_fp": FP_A, "ts": ts})
-    headers = {"Content-Type": "application/json", pv.SIGNATURE_HEADER: pv.sign(PSECRET, token, FP_A, ts)}
-    local = TestClient(app, base_url="https://testserver", client=("127.0.0.1", 4000))
-    assert local.post("/internal/phone-verified", content=body, headers={**headers, header: "127.0.0.1"}) \
-        .status_code == 404
-    assert local.post("/internal/phone-verified", content=body, headers=headers).status_code == 410  # the bot

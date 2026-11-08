@@ -419,7 +419,7 @@ def test_backend_unavailable_is_free():
 
 # ---------- limits ----------
 
-@pytest.mark.no_trial
+@pytest.mark.product_defaults
 def test_default_limits():
     s = Settings(db_url="sqlite://", secret=SECRET, base_url="http://x", dev=True)
     mb = 1024 * 1024

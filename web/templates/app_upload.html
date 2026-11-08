@@ -3,7 +3,6 @@
 {% block app %}
 <h1 class="h1s">{{ t('up_title') }}</h1>
 {% if error %}<p class="fine err" role="alert">{{ error }}</p>{% endif %}
-{% if need_phone %}<p class="note">{{ phone_more }} <a href="/app/phone">{{ t('ph_go') }}</a></p>{% endif %}
 {% for text in co_invites %}<p class="note">{{ text }} <a href="/app/company">{{ t('co_answer') }}</a></p>{% endfor %}
 {% if active %}<p class="note">{{ t('up_active') }} <a href="/app/batches/{{ active.public_id }}">{{ t('up_active_open') }}</a></p>{% endif %}
 <form class="upform" id="upform" method="post" action="/app/upload" enctype="multipart/form-data"

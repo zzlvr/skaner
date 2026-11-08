@@ -23,7 +23,6 @@ dependencies = [
 
 [project.optional-dependencies]
 demo = ["streamlit>=1.40"]
-bot = ["python-telegram-bot>=21", "pymupdf>=1.24", "pillow>=13.0"]
 web = ["fastapi>=0.115", "uvicorn>=0.30", "jinja2>=3.1", "python-multipart>=0.0.9", "sqlalchemy>=2.0", "alembic>=1.13", "itsdangerous>=2.2", "httpx>=0.27", "cryptography>=42"]
 dev = ["pytest>=8", "httpx>=0.27"]
 
@@ -31,8 +30,8 @@ dev = ["pytest>=8", "httpx>=0.27"]
 docstruc = "docstruc.cli:main"
 
 [tool.setuptools.packages.find]
-include = ["docstruc*", "bot*", "web*"]
+include = ["docstruc*", "web*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-markers = ["no_trial: run with the product defaults (no free trial) instead of the old tests' trial"]
+markers = ["product_defaults: run with the product defaults (free mode, no trial) instead of the commercial layer the old tests exercise"]
