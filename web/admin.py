@@ -1,11 +1,11 @@
-"""Owner admin (/admin): dashboard, users, payment requests, audit. Russian only (the owner reads Russian).
+"""Admin (/admin): dashboard, users, payment requests, action log.
 
 Who is admin: a signed-in user whose email fingerprint is one of the fingerprints of WEB_ADMIN_EMAILS (computed
 at start-up in web/main.py; nothing in the database marks admins).
 - Anyone else, signed in or not, gets the same 404 as an unknown address (also for POST and wrong methods).
 - The sign-in must be fresh: the session was created in the last 12 hours, otherwise the owner signs in again.
 - Every change is a POST with the CSRF token and Origin check, the admin check runs first (so a non-admin never
-  learns more than 404), at most 60 admin POSTs per hour, and each one writes an audit row.
+  learns more than 404), at most 60 admin POSTs per hour, and each one writes a row to the action log.
 - An email typed into the search is only fingerprinted in memory: never stored, logged or shown back.
 - Responses carry X-Robots-Tag: noindex and Cache-Control: no-store (web/main.py middleware).
 """

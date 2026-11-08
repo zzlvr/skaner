@@ -3,10 +3,7 @@ bot/billing.py.
 
 Three page buckets on the user row, spent in this order (the one that expires first goes first):
 1. trial_pages_left: granted once per user (50 pages, 14 days; whichever ends first), at most N new trials per IP
-   a day. With WEB_PHONE_VERIFY=1 (decision 43, web/phone.py) the first grant is only WEB_TRIAL_INSTANT_PAGES and
-   the rest is added once per phone number, confirmed through the Telegram bot (ledger reason "trial_bonus").
-2. plan_pages_left: a business plan switched on by the owner in /admin (decision 46: manual payment before the
-   sole proprietorship exists). Activation adds the plan's quota and sets plan_expires_at = now + 30 days. From
+   a day. 2. plan_pages_left: a business plan switched on by the owner in /admin (payment is manual). Activation adds the plan's quota and sets plan_expires_at = now + 30 days. From
    that moment on the bucket stops counting (balance() shows 0); the stored number is zeroed with a "plan_expire"
    ledger row the next time the account is touched (expire_plan). Unused plan pages do not survive the expiry.
 3. paid_pages_left: pages the owner adds by hand (top-ups). They never expire.

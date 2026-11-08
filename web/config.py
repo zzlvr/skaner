@@ -64,7 +64,7 @@ class Settings:
     memory_total: int = 400 * MB  # uploaded bytes held in memory by all batches being read, queued or processed
     memory_user: int = 100 * MB
     workers: int = 2  # batches recognised at the same time; others wait in a queue
-    trial_pages: int = 0  # no free trial (decision 67): 0 = none; the bring-your-own-key path is the free one
+    trial_pages: int = 0  # 0 = no trial; the free path is the user's own provider key
     trial_days: int = 14
     trials_per_ip_day: int = 3
     retention_days: int = 90
@@ -91,6 +91,11 @@ class Settings:
     # The commercial layer (pricing, plans, payment requests, page balance, trial). Off: the service is free and every
     # recognition runs on the user's own provider key. On: WEB_PAID_PLANS=1.
     paid_plans: bool = False
+    # Free mode needs no sign-in: a visitor gets a guest account (see web/deps.py). Guest results are kept this long,
+    # and one network may start this many guest sessions a day.
+    guest_retention_days: int = 7
+    guests_per_ip_day: int = 30
+    guests_per_day: int = 3000  # the whole site
     pay_email: str = ""  # shown on the Plans page: where to write to pay (manual payment); empty: not shown
     turnstile_secret: str = field(default="", repr=False)
     # Login-code mails the whole site may send per hour / per UTC day (the mail provider's free plan is small: past
@@ -157,6 +162,9 @@ class Settings:
             turnstile_site_key=os.environ.get("TURNSTILE_SITE_KEY", "").strip(),
             pay_email=os.environ.get("WEB_PAY_EMAIL", "").strip(),
             paid_plans=os.environ.get("WEB_PAID_PLANS", "").strip() == "1",
+            guest_retention_days=_int("WEB_GUEST_RETENTION_DAYS", 7),
+            guests_per_ip_day=_int("WEB_GUESTS_PER_IP_DAY", 30),
+            guests_per_day=_int("WEB_GUESTS_PER_DAY", 3000),
             turnstile_secret=os.environ.get("TURNSTILE_SECRET", "").strip(),
             mail_hourly=_int("WEB_MAIL_HOURLY", 30),
             mail_daily=_int("WEB_MAIL_DAILY", 80),

@@ -20,8 +20,9 @@ def main() -> int:
             now = utcnow()
             batches = purge_results(db, now)
             auth.purge_expired(db, now)
+            guests = auth.purge_guests(db, now)
             db.commit()
-        print(f"retention run: {batches} expired batches deleted")
+        print(f"retention run: {batches} expired batches and {guests} finished guest sessions deleted")
     finally:
         engine.dispose()
     return 0

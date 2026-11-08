@@ -5,6 +5,7 @@ Nothing here sees or stores a raw email except `send_code_mail` (in memory, to d
 
 import hmac
 import logging
+import secrets
 from datetime import datetime, timedelta
 
 from sqlalchemy import delete, func, select, update
@@ -12,10 +13,10 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from . import security as sec
-from .accounts import assign_code, new_account_code, trial_used_before
+from .accounts import assign_code, delete_user, new_account_code, trial_used_before
 from .config import Settings
 from .i18n import translator
-from .models import LoginCode, RateEvent, User, UserSession
+from .models import Batch, LoginCode, RateEvent, User, UserSession
 
 log = logging.getLogger(__name__)
 
@@ -32,6 +33,7 @@ SESSION_TOUCH = timedelta(hours=1)  # renew last_seen at most this often
 HOUR, DAY = timedelta(hours=1), timedelta(days=1)
 
 BUCKET_CODE_REQ = "code_req"
+BUCKET_GUEST = "guest"
 BUCKET_CODE_FAIL = "code_fail"
 BUCKET_MAIL_ALERT = "mail_cap_alert"
 
@@ -192,6 +194,44 @@ def get_or_create_user(db: Session, fp: str, lang: str, now: datetime) -> User:
     user.lang = lang
     db.commit()
     return user
+
+
+def create_guest(db: Session, lang: str, now: datetime) -> User:
+    """A guest account for a visitor who did not sign in: a random fingerprint instead of an email, a normal
+    account code. It is deleted when its session is gone (purge_guests)."""
+    for _ in range(5):
+        guest = User(email_fp=secrets.token_hex(32), lang=lang, created_at=now, last_login_at=now,
+                     account_code=new_account_code(), is_guest=True)
+        db.add(guest)
+        try:
+            db.commit()
+            return guest
+        except IntegrityError:  # a duplicate account code (very rare)
+            db.rollback()
+    raise RuntimeError("could not create a guest")
+
+
+def guest_limit_hit(db: Session, ip: str, limit: int, now: datetime) -> bool:
+    return _count(db, BUCKET_GUEST, ip, now - DAY) >= limit
+
+
+def merge_guest(db: Session, guest: User, user: User, now: datetime) -> None:
+    """The visitor signed in after using the site as a guest: their uploads move to the account, the guest goes."""
+    db.execute(update(Batch).where(Batch.user_id == guest.id).values(user_id=user.id))
+    db.execute(update(Batch).where(Batch.created_by_user_id == guest.id).values(created_by_user_id=user.id))
+    db.execute(update(Batch).where(Batch.wallet_user_id == guest.id).values(wallet_user_id=user.id))
+    db.commit()
+    delete_user(db, guest.id, now)
+
+
+def purge_guests(db: Session, now: datetime) -> int:
+    """Nightly: guests without a live session can never come back; delete them with their uploads."""
+    live = select(UserSession.user_id).where(UserSession.expires_at > now)
+    ids = db.scalars(select(User.id).where(User.is_guest.is_(True), User.id.not_in(live),
+                                           User.created_at < now - timedelta(hours=1))).all()
+    for user_id in ids:
+        delete_user(db, user_id, now)
+    return len(ids)
 
 
 def create_session(db: Session, user_id: int, ip: str | None, ua: str | None, now: datetime) -> str:

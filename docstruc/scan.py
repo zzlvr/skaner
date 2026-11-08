@@ -70,7 +70,7 @@ def cuts_content(gray: np.ndarray, outline: np.ndarray) -> bool:
     """True when there is text right outside `outline`: then the outline is not the sheet's edge but, for
     example, the edge of a shadow across the sheet, and cropping to it would cut off part of the document.
     Ink is measured by contrast to the local paper brightness, so text inside a shadow still counts.
-    (QA 2026-10-25: a shadow over the right third of an act made the crop drop its prices and sums.)"""
+    (A shadow over the right third of an act must not make the crop drop its prices and sums.)"""
     h, w = gray.shape[:2]
     k = max(9, int(min(h, w) * 0.015) | 1)
     closed = cv2.morphologyEx(gray, cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_RECT, (k, k)))

@@ -8,7 +8,7 @@
 - Logs carry counts and exception class names only: never file names, document text or values.
 - A batch can run with the user's own provider key (ByokKey, "bring your own key"): the key is passed in memory
   from the upload to the job, never stored, logged or shown; nothing is charged and the owner gets no service alerts.
-- Three kinds of batch (by Batch.fmt): tables (extraction), pdf_scan (local, free, no AI) and pdf_text
+- Three kinds of batch (by Batch.fmt): tables (extraction), pdf_scan (local, free, no model) and pdf_text
   (recognition of the whole text, charged by the same rules as extraction). All use the same pool and budget.
 """
 

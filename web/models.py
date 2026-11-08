@@ -31,7 +31,7 @@ class User(Base):
     # Telegram notice use it instead of any email. Nullable in the schema only because SQLite cannot add a NOT NULL
     # unique column without rebuilding `users` (which would cascade-delete child rows); always set in code.
     account_code: Mapped[str | None] = mapped_column(String(12), unique=True, index=True)
-    # Business plan switched on by the owner (decision 46): key (start/biz/firm), monthly quota, and the plan's own
+    # Business plan switched on by the owner: key (start/biz/firm), monthly quota, and the plan's own
     # page bucket, which stops counting at plan_expires_at.
     plan: Mapped[str | None] = mapped_column(String(8))
     plan_quota: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
@@ -41,6 +41,8 @@ class User(Base):
     # Fingerprint of the phone number confirmed in the Telegram bot (web/phone.py); never the number itself.
     # Unique (NULLs allowed on SQLite and PostgreSQL): one number belongs to one account.
     phone_fp: Mapped[str | None] = mapped_column(String(64), unique=True, index=True)
+    # A guest uses the site without signing in: a random account, no email. Removed after its session ends.
+    is_guest: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
 
 
 class LoginCode(Base):
@@ -188,7 +190,7 @@ class ScanDaily(Base):
 
 
 class PaymentRequest(Base):
-    """"Хочу оплатить" (decision 46). Company, contact and comment only inside `data_enc` (web/crypto.py,
+    """A payment request ("I want to pay"). Company, contact and comment only inside `data_enc` (web/crypto.py,
     key "requests", bound to the row id). Kept 90 days after it is marked done, 365 days if never handled."""
 
     __tablename__ = "payment_requests"
@@ -246,7 +248,7 @@ class PhoneChallenge(Base):
 
 
 class Organization(Base):
-    """A company cabinet (decision 56). The page balance of the company is the owner's own balance (users row of
+    """A company cabinet. The page balance of the company is the owner's own balance (users row of
     owner_user_id). The name is the owner's choice (2-80 characters, no control characters, nothing like an email)."""
 
     __tablename__ = "organizations"

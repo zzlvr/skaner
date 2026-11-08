@@ -235,3 +235,4 @@ tr.flag td,tr.flag th{background:var(--warnsoft)}
 .colink input{flex:1;min-width:0;font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:6px;background:var(--soft);color:var(--ink)}
 
 .upkey{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:14px 0;background:var(--soft)}.upkey legend{font-weight:600;padding:0 6px}.upkey input[type=password]{border:1px solid var(--line);border-radius:6px;padding:8px 10px;min-width:260px}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 8px}

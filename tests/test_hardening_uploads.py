@@ -1,19 +1,5 @@
-"""Second security audit (2026-10-22): attack-style tests for the issues it found. Each test failed before its fix.
-Fake backend, fake mailer, test databases: no network, no money, no real mail or Telegram.
-
-- Uploads: one account could send many uploads at once; each was refused as "active" only after its files had been
-  decoded, and a 1 KB WebP declares 25 megapixels (~100 MB while decoded). Ten parallel uploads of 20 such files
-  took the live dev server from 0.75 GB to 4.7 GB. Now: one upload in checking per user, a few per site, and at most
-  `workers` files decoded at once (web/jobs.UploadGate).
-- The upload held the request's database connection for its whole duration: 16 parallel uploads used up the pool
-  (5 + 10) and every other page answered 500. Now the connection is given back before the body is read.
-- A multipart body of hundreds of thousands of empty file parts passed every limit (about 10 s of CPU per 20 MB).
-  Now the number of parts is limited.
-- Per-IP limits counted single IPv6 addresses: one /64 (what a home line or a cheap server gets) bypassed the
-  login, failed-code, trial and payment-request limits. Now IPv6 counts by /64.
-- /internal/phone-verified: a request that came through the proxy (it carries X-Forwarded-For) is refused even if a
-  wrong real-IP setup made it look like 127.0.0.1.
-"""
+"""Hardening tests for uploads and per-IP limits: bounded decoding, limited multipart parts, parallel uploads.
+Fake backend, fake mailer, test databases: no network, no money, no real mail or Telegram."""
 
 import json
 import threading
@@ -30,7 +16,7 @@ from web.jobs import UploadGate
 from web.upload import MAX_FIELDS
 
 
-# ---------- per-IP limits: IPv6 counts by /64 (FIX) ----------
+# ---------- per-IP limits: IPv6 counts by /64 ----------
 
 def test_ip_key_groups_ipv6_by_network():
     a, b = sec.ip_key("2001:db8:1:2::1"), sec.ip_key("2001:db8:1:2:ffff:ffff:ffff:ffff")
@@ -57,7 +43,7 @@ def test_login_limit_cannot_be_bypassed_by_rotating_ipv6_addresses():
     assert r.status_code == 303
 
 
-# ---------- uploads: decoding is bounded (FIX) ----------
+# ---------- uploads: decoding is bounded ----------
 
 @pytest.fixture
 def counted_validate(monkeypatch):
@@ -162,7 +148,7 @@ def test_upload_does_not_hold_a_database_connection_while_files_are_checked(tmp_
     assert seen == [0, 0]
 
 
-# ---------- uploads: the number of multipart parts is limited (FIX) ----------
+# ---------- uploads: the number of multipart parts is limited ----------
 
 def _multipart(token: str, parts: int) -> bytes:
     b = b"xYz"
@@ -198,6 +184,3 @@ def test_the_real_form_with_an_empty_camera_input_still_works():
     r = e.client.post("/app/upload", data={"csrf_token": csrf(e.client), "doctype": "receipt", "fmt": "xlsx",
                                            "one_document": "0"}, files=files, follow_redirects=False)
     assert r.status_code == 303, r.text[:500]
-
-
-# ---------- the internal endpoint: never through the proxy (FIX) ----------

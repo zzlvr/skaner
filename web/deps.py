@@ -61,9 +61,33 @@ def current_user(request: Request, db: Session = Depends(get_db)) -> User | None
     return user
 
 
-def require_user(request: Request, user: User | None = Depends(current_user)) -> User:
+def _guest(request: Request, db: Session) -> User | None:
+    """Free mode needs no sign-in: a visitor who opens a page gets a guest account and a session. Only for page
+    views (GET), and only a limited number per network per day; otherwise the normal sign-in page."""
+    st = request.app.state
+    settings = st.settings
+    if settings.paid_plans or request.method != "GET":
+        return None
+    now = st.clock()
+    ipf = sec.ip_fp(settings, st.client_ip(request))
+    if (auth.guest_limit_hit(db, ipf, settings.guests_per_ip_day, now)
+            or auth.guest_limit_hit(db, "site", settings.guests_per_day, now)):
+        return None
+    guest = auth.create_guest(db, st.lang_of(request), now)
+    auth.record(db, auth.BUCKET_GUEST, ipf, now)
+    auth.record(db, auth.BUCKET_GUEST, "site", now)
+    token = auth.create_session(db, guest.id, ipf, sec.ua_fp(settings, request.headers.get("user-agent")), now)
+    request.state.user = guest
+    request.state.session_refresh = (token, int(auth.SESSION_TTL.total_seconds()))
+    request.state.session_created_at = now
+    return guest
+
+
+def require_user(request: Request, user: User | None = Depends(current_user), db: Session = Depends(get_db)) -> User:
     if user is None:
-        raise LoginRequired(request.url.path)
+        user = _guest(request, db)
+        if user is None:
+            raise LoginRequired(request.url.path)
     if user.blocked_at is not None:
         raise AccountBlocked()
     return user

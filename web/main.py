@@ -400,6 +400,9 @@ def create_app(
             response = render(request, "blocked.html", 403)
             clear_cookie(response, LOGIN_COOKIE, path="/login")
             return response
+        previous = auth.load_session(db, request.cookies.get(SESSION_COOKIE), now)
+        if previous is not None and previous[1].is_guest and previous[1].id != user.id:
+            auth.merge_guest(db, previous[1], user, now)
         auth.revoke_session(db, request.cookies.get(SESSION_COOKIE))  # no session fixation
         token = auth.create_session(db, user.id, ipf, sec.ua_fp(settings, request.headers.get("user-agent")), now)
         response = RedirectResponse(pending["next"], status_code=303)

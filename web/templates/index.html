@@ -5,6 +5,7 @@
   <div class="wrap">
     <h1>{{ t('h1a') }} <span>{{ t('h1b') }}</span></h1>
     <p class="lead">{{ t('lead') }}</p>
+    {% if paid_plans %}
     <form class="signup" method="post" action="/login">
       <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
       <label class="sr" for="hero-email">{{ t('email_label') }}</label>
@@ -12,6 +13,10 @@
       <button class="btn" type="submit">{{ t('try') }}</button>
     </form>
     <p class="fine">{{ t('fine') }}</p>
+    {% else %}
+    <div class="cta"><a class="btn" href="/app">{{ t('hero_cta') }}</a></div>
+    <p class="fine">{{ t('hero_fine') }}</p>
+    {% endif %}
     {% include "_consent.html" %}
 
     <div class="win demo" aria-hidden="true">

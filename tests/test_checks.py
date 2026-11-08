@@ -137,7 +137,7 @@ def test_doubted_iin_with_bad_checksum_stays_an_error():
     assert {i.severity for i in RECEIPT.validate(receipt) if i.field == "merchant_tax_id"} == {"error"}
 
 
-# ---------- QA 2026-10-25: misreads in large tenge amounts and VAT must not pass silently ----------
+# ---------- misreads in large tenge amounts and VAT must not pass silently ----------
 
 def kz_invoice(**overrides):
     """A VAT-included Kazakh invoice (311 520,00 ₸, «в том числе НДС 12%: 33 377,14»), as in the QA corpus."""

@@ -1,10 +1,10 @@
 """The two PDF formats of the website (the four table formats are in cabinet.py).
 
-- pdf_scan ("PDF-скан"): each photo is straightened and cleaned by docstruc.scan and put on a PDF page; a PDF
-  that was uploaded is appended as it is. No recognition, no AI, free. Same idea as the bot's "Скан в PDF"
-  (bot/pdf.py), with two extra guards for the website: a very large photo is reduced before OpenCV works on it
-  (bounded memory with 2 workers), and the result is scrubbed (no links, scripts, attachments, form fields).
-- pdf_text ("PDF с текстом"): every page is transcribed by the recognition backend (docstruc.digitize) and the
+- pdf_scan: each photo is straightened and cleaned by docstruc.scan and put on a PDF page; a PDF that was
+  uploaded is appended as it is. No recognition and no model. A very large photo is reduced before OpenCV works on
+  it (bounded memory with 2 workers), and the result is scrubbed (no links, scripts, attachments, form fields).
+  The site no longer offers this format; older results can still be downloaded.
+- pdf_text: every page is transcribed by the recognition backend (docstruc.digitize) and the
   recognised pages are stored encrypted; the PDF is laid out again on each download (digitize.render_pdf, which
   sanitizes the HTML: no images, no links, so a page cannot pull in a file or a URL).
 """
@@ -23,7 +23,7 @@ KINDS = {SCAN: "scan", TEXT: "text"}
 PRE_MAX_SIDE = 4000  # px: scan output is at most 2400 px anyway; bigger photos are reduced before OpenCV
 A4_LONG_SIDE = 842  # pt
 
-# Text of a page that could not be recognised, in the language of exported files (decision 30: ru or en).
+# Text of a page that could not be recognised, in the language of exported files (ru or en).
 FAILED_PAGE = {"ru": "[страница {n} не распознана]", "en": "[page {n} not recognised]"}
 
 

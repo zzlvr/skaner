@@ -106,7 +106,7 @@ def test_new_keys_in_every_locale():
         assert all(LOC[lang][k] for lang in LANGS)
 
 
-# ---------- PDF-скан: not offered any more (decision 67) ----------
+# ---------- PDF scan: not offered any more ----------
 
 def test_scan_is_not_offered_and_is_refused(env):
     c = env.client

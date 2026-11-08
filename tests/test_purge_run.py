@@ -25,6 +25,6 @@ def test_nightly_run_deletes_expired_results_and_keeps_fresh_ones(tmp_path, monk
     monkeypatch.setenv("WEB_DEV", "1")
     monkeypatch.setenv("WEB_SECRET", "x" * 40)
     assert purge.main() == 0
-    assert "1 expired batches deleted" in capsys.readouterr().out
+    assert "1 expired batches and 0 finished guest sessions deleted" in capsys.readouterr().out
     with e.db() as db:
         assert db.scalar(select(func.count()).select_from(Batch)) == 1

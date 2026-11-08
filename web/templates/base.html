@@ -38,7 +38,7 @@
       <a class="btn ghost cab" href="/app">{{ t('nav_cab') }}</a>
       {% else %}
       <a class="btn ghost" href="/login">{{ t('login') }}</a>
-      <a class="btn" href="/login">{{ t('try') }}</a>
+      <a class="btn" href="{{ '/login' if paid_plans else '/app' }}">{{ t('try') }}</a>
       {% endif %}
     </div>
   </div>

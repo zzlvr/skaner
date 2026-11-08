@@ -1,4 +1,4 @@
-"""Accounts: the plan catalogue (decision 40), human-friendly account codes, and full account deletion.
+"""Accounts: the plan catalogue, human-friendly account codes, and full account deletion.
 
 Deletion (by the user or by the owner) removes the user, sessions, batches with their encrypted results, scan
 counters and payment requests. Two things stay on purpose:

@@ -148,7 +148,7 @@ def test_only_review_issues_go_to_remarks(tmp_path):
 
 
 def test_quantity_has_no_trailing_decimal_sign(tmp_path):
-    """QA 2026-10-25: the format "0.###" showed a whole quantity 12 as "12," in Excel (and in what 1C reads)."""
+    """The format "0.###" showed a whole quantity 12 as "12," in Excel (and in what 1C reads)."""
     weighed = receipt("w.jpg")
     weighed.data["items"].append({"description": "Сыр", "quantity": 1.245, "unit_price": 1000, "total": 1245})
     path = tmp_path / "out.xlsx"

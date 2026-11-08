@@ -20,7 +20,7 @@ The engine does not run on a model of its own. You give it your own API key (Ant
 - Output: JSON, Excel (Documents / Line items / Review sheets, flagged cells highlighted), CSV (opens correctly in Russian-locale Excel), Excel prepared for 1C import, text PDF.
 - Several documents on one photo are found automatically; one document across several photos is supported.
 - Provider-agnostic model layer (`docstruc/llm/`). Backends: Anthropic Claude, Google Gemini.
-- Web app (`web/`, FastAPI): sign-in by email code, batches, history, company accounts, admin.
+- Web app (`web/`, FastAPI): no sign-up needed (guest sessions keep results for a few days), optional sign-in by email code for a history, company accounts, admin.
 
 ## Quick start (command line)
 
@@ -58,7 +58,7 @@ Honestly: measured on a **small** set. On 8 real Kazakhstan receipts (286 fields
 
 ## Status and roadmap
 
-Working: extraction, checks, exports, web app. Planned: OpenAI backend, QuickBooks and Xero exports, API keys for programmatic access, pay-per-request endpoint for AI agents (x402).
+Working: extraction, checks, exports, web app. Planned: OpenAI backend, QuickBooks and Xero exports, API keys for programmatic access, a pay-per-request API endpoint (x402).
 
 ## License
 

@@ -1,6 +1,6 @@
 """Test defaults.
 
-The product has no free trial (decision 67: Settings.trial_pages defaults to 0). Most tests exercise the page
+The product has no free trial (Settings.trial_pages defaults to 0). Most tests exercise the page
 balance and the trial machinery, so they run with a trial unless a test sets its own values. Tests marked
 `product_defaults` (and tests that read the real defaults, which build Settings through Settings.load or pass the values
 explicitly) see the product defaults.

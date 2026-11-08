@@ -101,7 +101,7 @@ def fill(text: str, **values) -> str:
 
 
 def files_lang(lang: str) -> str:
-    """Exported files and engine remarks: English for the English interface, otherwise Russian (decision 30)."""
+    """Exported files and engine remarks: English for the English interface, otherwise Russian."""
     return "en" if lang == "en" else "ru"
 
 
@@ -159,7 +159,7 @@ def shell(request: Request, db: Session, user: User, nav: str, crumbs: list) -> 
         "user": user, "bal": b, "days_left": b.days_left(now), "nav": nav, "crumbs": crumbs,
         "trial_blocked": False if ctx.is_member else bal.trial_blocked_by_ip(db, _st(request).settings, user,
                                                                                _ipf(request), now),
-        "co_org": ctx.org, "co_member": ctx.is_member,
+        "co_org": ctx.org, "co_member": ctx.is_member, "guest_days": _st(request).settings.guest_retention_days,
         "plan_line": plan_line,
         # The owner gets an "Админка" link in the menu; everyone else never sees that /admin exists.
         "is_admin": user.email_fp in getattr(_st(request), "admin_fps", ()),
@@ -190,7 +190,7 @@ def format_groups(t, scan_pages: int) -> list[tuple[str, list[dict]]]:
 
     return [
         (t("up_fmt_tables"), [option(k, v[0], "table") for k, v in FORMATS.items()]),
-        ("PDF", [option(k, v[0], KINDS[k]) for k, v in PDF_FORMATS.items() if k != SCAN]),  # no free scan (decision 67)
+        ("PDF", [option(k, v[0], KINDS[k]) for k, v in PDF_FORMATS.items() if k != SCAN]),
     ]
 
 
@@ -720,7 +720,7 @@ def _admit(request: Request, user_id: int, doctype: str, fmt: str, one_document:
             created_by_user_id=user_id, wallet_user_id=wallet.id, doctype=doctype, fmt=fmt, one_document=one_document,
             trial_funded=trial, byok=byok, lang=st.lang_of(request), status="queued", files_count=files_count, files_done=0, pages_estimated=pages,
             pages_charged=0, work_units=0, docs_found=0, needs_review=0, failed_files=0, not_found=0,
-            created_at=now, expires_at=now + timedelta(days=s.retention_days),
+            created_at=now, expires_at=now + timedelta(days=s.guest_retention_days if user.is_guest else s.retention_days),
         )
         db.add(batch)
         db.commit()

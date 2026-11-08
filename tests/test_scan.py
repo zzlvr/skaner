@@ -41,7 +41,7 @@ def test_no_sheet_found_keeps_the_whole_photo():
 
 
 def test_outline_through_the_text_is_not_a_sheet():
-    """QA 2026-10-25: a soft shadow over the right third of a photographed act made the outline of the lit part
+    """A soft shadow over the right third of a photographed act made the outline of the lit part
     look like the sheet, and the PDF-scan dropped the prices and sums. Text right outside an outline = no crop."""
     gray = np.full((1000, 800), 70, np.uint8)
     gray[100:900, 100:700] = 240  # the sheet

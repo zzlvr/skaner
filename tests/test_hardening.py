@@ -1,19 +1,5 @@
-"""Security audit (2026-10-22): attack-style tests. Each block either proves a fix made in this audit (the test failed
-before) or locks in a protection that already worked. Fake backend, fake mailer, in-memory database: no network,
-no money, no real mail or Telegram.
-
-Fixed in this audit (tests marked FIX):
-- /admin/, /internal/..., /app/... with a trailing slash answered 307 (the redirect showed that /admin exists);
-- /internal/phone-verified answered 405 to GET even with phone confirmation off (the route was visible);
-- POST /contacts had no body limit (a large form, or files Starlette spools to disk); a big POST to /admin answered
-  413 while an unknown path answered 404 (an oracle);
-- the internal endpoint trusted only the proxy rule: now also loopback-only outside dev;
-- WEB_DEV=1 could be started with a public WEB_BASE_URL (no Secure cookies, no HSTS, built-in secret, demo login);
-- pages under /join/<token> sent the token in the Referer to our own static files (proxy logs keep Referers);
-- /contacts could be cached (no Cache-Control);
-- a text PDF with colspan="²" (from a hostile document) could never be downloaded (ValueError);
-- Pillow parsed images with every decoder it has; now only the sniffed type's decoder runs.
-"""
+"""Hardening tests: routing, request limits, configuration, caching and templates. Fake backend, fake mailer,
+in-memory database: no network, no money, no real mail or Telegram."""
 
 import asyncio
 import io
@@ -78,7 +64,7 @@ def raw_asgi(app, method: str, raw_path: str, headers=()):
     return next(m["status"] for m in sent if m["type"] == "http.response.start")
 
 
-# ---------- hidden areas: one plain 404 for everyone who may not use them (FIX) ----------
+# ---------- hidden areas: one plain 404 for everyone who may not use them ----------
 
 ADMIN_PATHS = ("/admin", "/admin/", "/admin/users", "/admin/users/", "/admin/users/SK-AAAAAA",
                "/admin/users/SK-AAAAAA/", "/admin/users/find", "/admin/users/SK-AAAAAA/block", "/admin/requests",
@@ -123,7 +109,7 @@ def test_internal_is_a_plain_404_when_phone_confirmation_is_off():
         assert e.client.request(m, "/app/phone").status_code == 404, m
 
 
-# ---------- request size: every POST is limited, the answer does not depend on the path (FIX) ----------
+# ---------- request size: every POST is limited, the answer does not depend on the path ----------
 
 def test_every_post_except_upload_has_a_small_body_limit():
     e = AppEnv()
@@ -163,7 +149,7 @@ def test_post_without_length_is_refused():
     assert r.status_code == 411
 
 
-# ---------- configuration: development mode cannot run on a public address (FIX) ----------
+# ---------- configuration: development mode cannot run on a public address ----------
 
 def test_dev_mode_refuses_a_public_base_url(monkeypatch):
     monkeypatch.setenv("WEB_DEV", "1")
@@ -433,7 +419,7 @@ def test_strangers_and_members_cannot_reach_other_peoples_batches():
                 assert client.get(u + suffix).status_code == 404, (u, suffix)
             r = client.post(u + "/delete", data={"csrf_token": csrf(client, "/app")})
             assert r.status_code == 404
-    assert owner.get(member_url).status_code == 200  # the owner sees the company's batches (decision 58)
+    assert owner.get(member_url).status_code == 200  # the owner sees the company's batches
     with e.db() as s:
         assert s.query(Batch).count() == 3
 

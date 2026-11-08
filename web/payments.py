@@ -1,10 +1,10 @@
-"""Payment step, manual for now (decision 46): "I want to pay" stores a request and tells the owner in Telegram;
+"""Payment step, manual for now: "I want to pay" stores a request and tells the owner in Telegram;
 the owner switches the plan on by hand in /admin.
 
 The rest of the site talks to this module only through `PaymentProvider.submit(...)`. When automatic payment comes
 (after the sole proprietorship is registered), a new provider replaces ManualPayment; pages and plans stay.
 
-Privacy (decision 47): company, contact and comment live only inside the encrypted blob of the request
+Privacy: company, contact and comment live only inside the encrypted blob of the request
 (web/crypto.encrypt_request). Logs carry counts and exception class names only. The Telegram text has no email
 (the site has none; addresses typed into the form are refused) and is sent as plain text: no parse_mode, so no
 markup can be injected; every value is cleaned and cut to its limit.

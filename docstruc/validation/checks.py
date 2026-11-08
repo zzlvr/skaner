@@ -13,7 +13,7 @@ from docstruc.core.models import Issue
 from docstruc.validation.kz import is_valid_iin_bin
 
 # Amounts are printed rounded to cents, so allow a cent per added term. No relative slack: 0.1% of a
-# 4 000 000 ₸ invoice is 4 000 ₸, so a misread digit in the hundreds would pass unnoticed (QA 2026-10-25).
+# 4 000 000 ₸ invoice is 4 000 ₸, so a misread digit in the hundreds would pass unnoticed.
 ABS_TOLERANCE = 0.011
 REL_TOLERANCE = 1e-9  # float noise only
 # A printed unit price is rounded to cents, so quantity × printed price may differ from the line total

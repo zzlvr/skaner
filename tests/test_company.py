@@ -1,4 +1,4 @@
-"""Company cabinets (decision 56, web/company.py): creating, invitations by link and by account code, member caps,
+"""Company cabinets (web/company.py): creating, invitations by link and by account code, member caps,
 the shared page balance, who sees which batch, leaving, removing, deleting, admin view, languages, migration 0006.
 
 Visibility (owner's rule): a member sees only the company batches they made; the owner sees every company batch

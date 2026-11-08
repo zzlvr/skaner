@@ -6,7 +6,7 @@
       <a href="/app"{% if nav == 'up' %} aria-current="page"{% endif %}>{{ t('nav_up') }}</a>
       <a href="/app/history"{% if nav == 'docs' %} aria-current="page"{% endif %}>{{ t('nav_docs') }}</a>
       {% if paid_plans %}<a href="/app/plans"{% if nav == 'plans' %} aria-current="page"{% endif %}>{{ t('nav_plans') }}</a>{% endif %}
-      <a href="/app/company"{% if nav == 'co' %} aria-current="page"{% endif %}>{{ t('nav_company') }}</a>
+      {% if not user.is_guest %}<a href="/app/company"{% if nav == 'co' %} aria-current="page"{% endif %}>{{ t('nav_company') }}</a>{% endif %}
       <a href="/app/account"{% if nav == 'acc' %} aria-current="page"{% endif %}>{{ t('nav_settings') }}</a>
       {% if is_admin %}<a href="/admin">Admin</a>{% endif %}
     </nav>
@@ -24,10 +24,14 @@
       {% else %}<div>{{ t('bal_none') }}</div>{% endif %}
       {% if bal.show_pay and nav != 'plans' and not co_member %}<a class="spay" href="/app/plans">{{ t('pl_pay') }}</a>{% endif %}
     </div>{% endif %}
+    {% if user.is_guest %}
+    <div class="sbal"><div>{{ t('guest_note')|replace('{n}', guest_days|string) }}</div><a class="spay" href="/login?next=/app">{{ t('guest_signin') }}</a></div>
+    {% else %}
     <form class="logout" method="post" action="/logout">
       <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
       <button class="btn ghost" type="submit">{{ t('logout') }}</button>
     </form>
+    {% endif %}
   </aside>
   <div class="spane">
     <nav class="bc" aria-label="{{ t('bc_label') }}">

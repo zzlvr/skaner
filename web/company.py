@@ -1,4 +1,4 @@
-"""Company cabinets (decision 56): one owner, members, invitations, the shared page balance, who sees which batch.
+"""Company cabinets: one owner, members, invitations, the shared page balance, who sees which batch.
 
 Rules:
 - A user is in at most one company (memberships.user_id is unique). A user in no company works exactly as before.

@@ -33,3 +33,9 @@ samples/out_*
 /*.jpeg
 
 __pycache__/
+
+# Local notes and scratch work
+CLAUDE.md
+AGENTS.md
+.claude/
+scratch/

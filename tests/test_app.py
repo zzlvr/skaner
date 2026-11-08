@@ -824,7 +824,7 @@ def test_formula_injection_exported_as_text(env):
 
 
 def test_csv_opens_in_russian_excel(env):
-    """QA 2026-10-25: Excel in ru/kk Windows splits CSV by ";" and reads "," as the decimal sign. A comma-separated
+    """Excel in ru/kk Windows splits CSV by ";" and reads "," as the decimal sign. A comma-separated
     file landed in one column there, and 2400.0 / 12.5 were text or dates. English files keep "," and "."."""
     env.plan["c"] = {"docs": [dict(RECEIPT, total=2400.5, items=[
         {"description": "Сыр, весовой", "quantity": 1.25, "unit_price": 1920.4, "total": 2400.5},

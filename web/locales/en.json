@@ -388,5 +388,9 @@
  "consent_mid": "and the",
  "consent_privacy": "Privacy Policy",
  "consent_post": " and confirm that you use the service for work or business.",
- "foot_source": "Source code"
+ "foot_source": "Source code",
+ "hero_cta": "Upload a document",
+ "hero_fine": "No account needed. Paste your own API key and upload.",
+ "guest_note": "You are using Skaner without an account. Your results stay in this browser for {n} days.",
+ "guest_signin": "Sign in to keep a history"
 }

@@ -1,4 +1,4 @@
-"""Bring-your-own-key (decision 67): a batch run with the user's own provider key takes nothing from the page
+"""Bring-your-own-key: a batch run with the user's own provider key takes nothing from the page
 balance or the site's daily cap, the key is never stored or logged, and the owner gets no alerts for it."""
 
 import logging
@@ -173,7 +173,7 @@ def test_byok_key_object_hides_and_wipes_the_key():
     assert set(BYOK_PROVIDERS) == {"anthropic", "gemini"}
 
 
-# ---------- no free trial (decision 67) ----------
+# ---------- no free trial ----------
 
 @pytest.mark.product_defaults
 def test_new_user_gets_no_free_pages_and_must_bring_a_key_or_pay(seen):

@@ -52,7 +52,7 @@ def test_digitize_transcribes_each_page_in_order():
 
 
 def test_wide_table_is_not_cut_off_at_the_page_edge():
-    """QA 2026-10-25: MuPDF does not shrink a table wider than the page; the right columns of a 9-column
+    """MuPDF does not shrink a table wider than the page; the right columns of a 9-column
     waybill З-2 (the sums) ran off A4 and were lost, also from the text layer. Wide pages go landscape."""
     nbsp = " "  # the model keeps the document's non-breaking thousands separators, so numbers cannot wrap
     head = "".join(f"<th>{h}</th>" for h in (

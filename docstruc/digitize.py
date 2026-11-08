@@ -113,7 +113,7 @@ th {font-weight: bold; background-color: #eeeeee;}
 
 
 # A table wider than the page is not shrunk by MuPDF: its right columns run off the page and are lost, also from
-# the text layer (QA 2026-10-25: the sums of a 9-column waybill З-2 were missing). Such a page is laid out on
+# the text layer (the sums of a 9-column waybill used to be cut off). Such a page is laid out on
 # landscape A4, and if it is still too wide, with smaller table text.
 NARROW_CSS = "body {font-size: 8.5pt;} th, td {font-size: 7pt; padding: 1pt 2pt;}"
 LAYOUTS = (("a4", CSS), ("a4-l", CSS), ("a4-l", CSS + NARROW_CSS))
