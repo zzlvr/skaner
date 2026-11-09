@@ -42,6 +42,6 @@ WAYBILL = DocType(
         checks.items_sum,
         checks.total_consistent,
         checks.tax_consistent,
-        checks.kz_tax_ids("sender.tax_id", "recipient.tax_id"),
+        checks.tax_ids("sender.tax_id", "recipient.tax_id"),
     ],
 )

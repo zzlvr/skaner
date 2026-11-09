@@ -49,27 +49,40 @@ def _page_schema(spec: DocType) -> type[BaseModel]:
     return _PAGE_SCHEMAS[spec.name]
 
 
-def _result(spec: DocType, parsed: BaseModel, source: str, backend: LLMBackend) -> ExtractionResult:
+def _result(
+    spec: DocType, parsed: BaseModel, source: str, backend: LLMBackend, parts: list[Document], locate: bool = False
+) -> ExtractionResult:
     normalize(parsed)
-    return ExtractionResult(
+    result = ExtractionResult(
         source=source,
         doctype=spec.name,
         model=backend.name,
         data=parsed.model_dump(mode="json"),
         issues=spec.validate(parsed),
     )
+    if locate:
+        from docstruc.evidence import locate_evidence
+
+        try:
+            locate_evidence(result, parts)
+        except Exception:  # positions are an extra: a page that cannot be read a second way keeps its result
+            pass
+    return result
 
 
 def extract(
     source: Source | Sequence[Source],
     doctype: str,
     backend: LLMBackend | None = None,
+    locate: bool = False,
 ) -> ExtractionResult:
     """Extract exactly one document and validate it.
 
     `source` is a file path or a loaded `Document`. A list of them is treated as the
     ordered parts of a single document (e.g. a long receipt photographed in pieces).
     Nothing is stored: files are read, sent to the backend and the result is returned.
+    With `locate=True` the document is also read a second way (PDF text or OCR) to record where each value is
+    printed (`result.evidence`) and to flag values that are not in the document at all.
     """
     spec = get_doctype(doctype)
     sources = list(source) if isinstance(source, Sequence) and not isinstance(source, str) else [source]
@@ -78,10 +91,12 @@ def extract(
     parts = [_load(s) for s in sources]
     backend = _backend(backend)
     parsed = backend.extract(parts, spec.schema, spec.instructions)
-    return _result(spec, parsed, " + ".join(p.name for p in parts), backend)
+    return _result(spec, parsed, " + ".join(p.name for p in parts), backend, parts, locate)
 
 
-def extract_all(source: Source, doctype: str, backend: LLMBackend | None = None) -> list[ExtractionResult]:
+def extract_all(
+    source: Source, doctype: str, backend: LLMBackend | None = None, locate: bool = False
+) -> list[ExtractionResult]:
     """Extract every document found in one file. Several documents get names like "photo.jpg #2"."""
     spec = get_doctype(doctype)
     document = _load(source)
@@ -99,5 +114,5 @@ def extract_all(source: Source, doctype: str, backend: LLMBackend | None = None)
             )
         ]
     if len(found) == 1:
-        return [_result(spec, found[0], document.name, backend)]
-    return [_result(spec, doc, f"{document.name} #{n}", backend) for n, doc in enumerate(found, start=1)]
+        return [_result(spec, found[0], document.name, backend, [document], locate)]
+    return [_result(spec, doc, f"{document.name} #{n}", backend, [document], locate) for n, doc in enumerate(found, start=1)]

@@ -3,7 +3,7 @@
 from docstruc import config
 from docstruc.llm.base import LLMBackend
 
-BACKENDS = ("gemini", "claude")
+BACKENDS = ("gemini", "claude", "openai")  # "openai": OpenAI or any compatible server, e.g. a local Ollama
 
 
 def get_backend(name: str | None = None, model: str | None = None, api_key: str | None = None) -> LLMBackend:
@@ -17,4 +17,8 @@ def get_backend(name: str | None = None, model: str | None = None, api_key: str 
         from docstruc.llm.claude import ClaudeBackend
 
         return ClaudeBackend(model=model, api_key=api_key)
+    if name == "openai":
+        from docstruc.llm.openai_compat import OpenAICompatBackend
+
+        return OpenAICompatBackend(model=model, api_key=api_key)
     raise ValueError(f"Unknown backend '{name}'. Available: {', '.join(BACKENDS)}")

@@ -1,0 +1,15 @@
+name: Feature or document type request
+description: A new document type, export format, check or country rule
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What you need
+      description: The document or format, the country, and what you do with the data afterwards.
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Example
+      description: A link to the format specification, or a blanked-out sample with no real data.

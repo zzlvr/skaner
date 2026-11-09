@@ -39,6 +39,6 @@ INVOICE = DocType(
         checks.items_sum,
         checks.total_consistent,
         checks.tax_consistent,
-        checks.kz_tax_ids("seller.tax_id", "buyer.tax_id"),
+        checks.tax_ids("seller.tax_id", "buyer.tax_id"),
     ],
 )

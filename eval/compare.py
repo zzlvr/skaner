@@ -53,7 +53,7 @@ def compare(results: list[dict], truth: dict) -> dict:
         data = r["data"]
         errors = []
         for field, expected in gt.items():
-            if field == "items":
+            if field == "items" or field.startswith("_"):  # "_..." keys are notes about the sample, not fields
                 continue
             fields_total += 1
             if _match_any(expected, data.get(field), fuzzy=field in FUZZY_FIELDS):
@@ -78,7 +78,13 @@ def compare(results: list[dict], truth: dict) -> dict:
 
         report.append({"file": r["file"], "needs_review": r["needs_review"], "errors": errors})
 
+    wrong = [d for d in report if d["errors"]]
+    silent = [d for d in wrong if not d["needs_review"]]
     return {
+        # documents with a wrong value, and how many of them were NOT sent to review (the dangerous ones)
+        "documents_with_errors": len(wrong),
+        "silent_errors": len(silent),
+        "silent_error_files": [d["file"] for d in silent],
         "documents": len(report),
         "header_accuracy": fields_ok / fields_total if fields_total else None,
         "item_accuracy": items_ok / items_total if items_total else None,
@@ -108,6 +114,8 @@ def main(argv: list[str] | None = None) -> int:
     print(f"Header fields: {h[0]}/{h[1]} = {summary['header_accuracy']:.1%}")
     print(f"Line item values: {it[0]}/{it[1]} = {summary['item_accuracy']:.1%}")
     print(f"Overall: {summary['overall_accuracy']:.1%}")
+    print(f"Documents with a wrong value: {summary['documents_with_errors']}, "
+          f"of them not sent to review (silent): {summary['silent_errors']}")
     return 0
 
 

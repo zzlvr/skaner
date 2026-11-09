@@ -1,0 +1,20 @@
+name: Bug report
+description: A wrong or missing value, a crash, or something that does not work
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you expected and what you got. For a wrong value, name the field and the correct value.
+    validations:
+      required: true
+  - type: input
+    id: setup
+    attributes:
+      label: Document type, backend and model
+      placeholder: invoice, claude, claude-opus-5-5
+  - type: textarea
+    id: sample
+    attributes:
+      label: Sample
+      description: Attach a document only if it holds no personal or business data (blank it out first). Otherwise describe it.

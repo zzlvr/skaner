@@ -15,6 +15,15 @@ class Issue(BaseModel):
     message: str
 
 
+class Evidence(BaseModel):
+    """Where a value was found on the source. `box` is (x0, y0, x1, y1) as fractions of the page size."""
+
+    part: int = 0  # index of the input file (a document can be given as several parts)
+    page: int = 0
+    box: tuple[float, float, float, float]
+    text: str  # what is printed there
+
+
 class Document(BaseModel):
     """A loaded input file."""
 
@@ -29,6 +38,7 @@ class ExtractionResult(BaseModel):
     model: str
     data: dict[str, Any]
     issues: list[Issue] = []
+    evidence: dict[str, Evidence] = {}  # dotted field path -> where it was found; empty unless located
 
     @property
     def needs_review(self) -> bool:

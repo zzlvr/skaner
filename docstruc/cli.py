@@ -12,6 +12,7 @@ from docstruc.core.pipeline import extract, extract_all
 from docstruc.doctypes import DOCTYPES
 from docstruc.exporters import EXPORTERS, FORMATS, export
 from docstruc.llm import BACKENDS
+from docstruc.validation.batch import find_duplicates
 
 
 def _run_extract(args: argparse.Namespace) -> int:
@@ -29,10 +30,18 @@ def _run_extract(args: argparse.Namespace) -> int:
     if hasattr(backend, "cache_prefix"):
         backend.cache_prefix = len(jobs) > 1  # several files in a row: cache the shared instructions
     results: list[ExtractionResult] = []
+    report_entries = []  # (result, source documents) for --report
+    locate = bool(args.report)
     for n, job in enumerate(jobs, start=1):
         label = " + ".join(p.name for p in job)
         try:
-            found = [extract(job, args.type, backend=backend)] if args.one_document else extract_all(job[0], args.type, backend=backend)
+            docs = [files.from_path(p) for p in job]
+            found = (
+                [extract(docs, args.type, backend=backend, locate=locate)]
+                if args.one_document
+                else extract_all(docs[0], args.type, backend=backend, locate=locate)
+            )
+            report_entries.extend((r, docs) for r in found)
         except QuotaExceededError as exc:
             # Every remaining file would fail the same way: stop and keep what is done.
             print(f"\nStopped: {exc}", file=sys.stderr)
@@ -45,7 +54,12 @@ def _run_extract(args: argparse.Namespace) -> int:
         print(f"[{n}/{len(jobs)}] {status:6} {label}{extra}")
         results.extend(found)
 
+    find_duplicates(results)
     written = export(results, args.out, fmt=args.format)
+    if args.report:
+        from docstruc.evidence.report import write_report
+
+        written.append(write_report(report_entries, args.report))
     review = sum(r.needs_review for r in results)
     print(f"\n{len(results)} documents, {review} need review. Saved: {', '.join(map(str, written))}")
     cost = getattr(backend, "cost_usd", None)
@@ -91,6 +105,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     ex.add_argument("--backend", default=None, choices=BACKENDS, help="Model provider (default: DOCSTRUC_BACKEND)")
     ex.add_argument("--model", default=None, help="Override the model name")
+    ex.add_argument(
+        "--report", default=None, metavar="FILE.html",
+        help="Also write an HTML report that shows where each value is on the page (reads every document a second "
+        "time with PDF text or OCR; photos need: pip install \"docstruc[locate]\")",
+    )
     ex.add_argument(
         "--one-document",
         action="store_true",

@@ -11,6 +11,7 @@ from pydantic import BaseModel
 
 from docstruc.core.models import Issue
 from docstruc.validation.kz import is_valid_iin_bin
+from docstruc.validation.ru import is_valid_ru_inn
 
 # Amounts are printed rounded to cents, so allow a cent per added term. No relative slack: 0.1% of a
 # 4 000 000 ₸ invoice is 4 000 ₸, so a misread digit in the hundreds would pass unnoticed.
@@ -95,7 +96,7 @@ def corroborate(data: BaseModel, issues: list[Issue]) -> list[Issue]:
         if by is None and issue.message == UNCERTAIN_MESSAGE:
             value = _get(data, issue.field)
             if isinstance(value, str) and _TWELVE_DIGITS.match(re.sub(r"\s", "", value)):
-                if is_valid_iin_bin(re.sub(r"\s", "", value)):
+                if _valid_twelve_digit_id(re.sub(r"\s", "", value)):
                     by = "the IIN/BIN checksum"
         if by is not None and issue.message == UNCERTAIN_MESSAGE and issue.severity == "error":
             issue = Issue(field=issue.field, severity="warning", message=CONFIRMED_MESSAGE.format(by=by))
@@ -255,8 +256,16 @@ def tax_consistent(data: BaseModel) -> list[Issue]:
 _TWELVE_DIGITS = re.compile(r"^\d{12}$")
 
 
-def kz_tax_ids(*fields: str):
-    """If a tax id looks like a Kazakh IIN/BIN (12 digits), verify its control digit."""
+def _valid_twelve_digit_id(compact: str) -> bool:
+    """A 12-digit tax number is a Kazakh IIN/BIN or a Russian individual INN; either checksum is enough."""
+    return is_valid_iin_bin(compact) or is_valid_ru_inn(compact)
+
+
+def tax_ids(*fields: str):
+    """If a tax id has 12 digits, verify its control digits (Kazakh IIN/BIN or Russian INN).
+
+    Other lengths are left alone: they can be a VAT, EIN, UNP or any other national number.
+    """
 
     def check(data: BaseModel) -> list[Issue]:
         issues = []
@@ -265,7 +274,7 @@ def kz_tax_ids(*fields: str):
             if not value:
                 continue
             compact = re.sub(r"\s", "", value)
-            if _TWELVE_DIGITS.match(compact) and not is_valid_iin_bin(compact):
+            if _TWELVE_DIGITS.match(compact) and not _valid_twelve_digit_id(compact):
                 # A failed checksum almost always means a misread digit, so a human must check it.
                 issues.append(
                     Issue(field=f, severity="error", message="12-digit number fails the IIN/BIN checksum")
@@ -273,3 +282,6 @@ def kz_tax_ids(*fields: str):
         return issues
 
     return check
+
+
+kz_tax_ids = tax_ids  # the former name

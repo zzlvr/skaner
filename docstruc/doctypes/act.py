@@ -44,6 +44,6 @@ ACT = DocType(
         checks.items_sum,
         checks.total_consistent,
         checks.tax_consistent,
-        checks.kz_tax_ids("contractor.tax_id", "customer.tax_id"),
+        checks.tax_ids("contractor.tax_id", "customer.tax_id"),
     ],
 )

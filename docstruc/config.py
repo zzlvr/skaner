@@ -38,3 +38,20 @@ def model_name(backend: str) -> str:
     if override and backend == backend_name():
         return override
     return DEFAULT_MODELS[backend]
+
+
+def openai_base_url() -> str:
+    """Any OpenAI-compatible endpoint; the default is a local Ollama."""
+    return os.environ.get("DOCSTRUC_BASE_URL", "").strip() or "http://localhost:11434/v1"
+
+
+def openai_api_key() -> str:
+    """Optional: a local server needs none."""
+    return os.environ.get("DOCSTRUC_API_KEY", "").strip() or os.environ.get("OPENAI_API_KEY", "").strip()
+
+
+def openai_model() -> str:
+    model = os.environ.get("DOCSTRUC_MODEL", "").strip()
+    if not model:
+        raise RuntimeError("Name the model: --model, or DOCSTRUC_MODEL in .env (for example a vision model in Ollama).")
+    return model

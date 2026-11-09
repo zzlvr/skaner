@@ -27,6 +27,7 @@ from .billing_rules import Job, cost_units
 from docstruc.core.files import page_count, split_pages
 from docstruc.core.models import Document, ExtractionResult
 from docstruc.core.pipeline import extract, extract_all
+from docstruc.validation.batch import find_duplicates
 from docstruc.digitize import transcribe
 from docstruc.exporters import json_export
 
@@ -310,6 +311,7 @@ def _run(ctx: Context, batch_id: int, documents: list[Document], byok: ByokKey |
         now = ctx.clock()
         all_failed = not billed or not any(j.ok for j in billed)
         bill = _settle(db, batch, billed, now)
+        find_duplicates(results)  # the same document twice in one upload
         found_docs = [r for r in results if r.data]
         failed_jobs = sum(1 for j in billed if not j.ok)
         values = dict(

@@ -34,6 +34,6 @@ RECEIPT = DocType(
         checks.line_totals,
         checks.items_sum,
         checks.total_consistent,
-        checks.kz_tax_ids("merchant_tax_id"),
+        checks.tax_ids("merchant_tax_id"),
     ],
 )
